@@ -159,22 +159,27 @@ Method    | Avg. Case | Worst Case | Best Case   | Notes
 
 ### API
 - `include?(el)`: returns boolean indicating whether the element is in the List
-- `append(el)`: appends passed element to the List and returns that element
-- `prepend(el)`: prepends an element to the List and returns that element
-- `delete(el)`: removes passed element from the List or returns nil if the element is not in it
+- `append(el)`: appends an element
+- `prepend(el)`: prepends an element
+- `delete(el)`: removes an element
 - `empty?`: returns boolean indicating whether the List is empty
 - `[](index)`: returns the element at a specified index or nil if the element is not in the List
-- `first`: returns the first element in the List
-- `last`: returns the last element in the List
+- `first`: returns the first element
+- `last`: returns the last element
 
 ### Sub-Types
+- Note the implementation below applies to both Linked List types listed below.
 
 1\) **Singly-Linked List**
 
 2\) **Doubly-Linked List**
   - Singly-Linked List with augmentations: add a previous attribute for the nodes.
 
-### Time/Space Complexity
+### Implementation
+- Using a **Node class**
+  - A Linked List is often referred to as a `node-based data structure`.
+    - Trees also fall into this category.
+- The time and space complexities below refer to this implementation.
 - Note that the time and space complexities for the Singly-Linked List and Doubly-Linked List will be the same asymptotically, so the following complexities are for both types.
 - **Time Complexity**
 
@@ -193,19 +198,11 @@ Method | Avg. Case | Worst Case | Best Case | Notes
 - Note: insertion anywhere other than the beginning or end of the List would be O(n).
 
 - **Space Complexity**: O(n)
-  - Space complexity is more than a Singly-Linked List because were storing an extra link to a node, but it doesn't change it asymptotically (still linear).
-
-### Implementation
-
-1\) Using a **Node class**
-- Both linked list types can be implemented using a node class.
-- So linked lists are often referred to as a `node-based data structure`.
-  - Trees also fall into this category.
-- The time and space complexities above refer to this implementation.
+  - Space complexity for a Doubly-Linked List is more than a Singly-Linked List because were storing an extra link to a node, but it doesn't change it asymptotically (still linear).
 
 ### Usage
 - The advantage of the Linked List is that the values are stable: they don't correspond to indices so you never need to re-index.
-  - If you are building an `LRU Cache` you're prepending to the List so you can do this in constant time O(1) with the Linked List but with an array it will take linear time O(n).
+  - If you are building an `LRU Cache` you're prepending to the List so you can do this in constant time O(1) with the Linked List but with an array it would take linear time O(n).
 - Also useful in general if you are deleting many items: it will be faster than with an array, but doesn't make a difference in the time complexity asymptotically.
 
 [Doubly-Linked List - Node class implementation](./lib/linked_list.rb)
