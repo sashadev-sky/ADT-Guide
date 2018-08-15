@@ -258,7 +258,7 @@ Method  |  Worst Case | Notes
 
 ### Specifications:
 - FIFO
-  - Data can only be inserted at the end of Queue (same as Stack)
+  - Data can only be inserted at the end of a Queue (same as Stack)
   - Data can only be read from the front of a Queue (opposite behavior of Stack)
   - Data can only be removed from the front of a Queue (opposite behavior of Stack)
 - Sequential/Ordered (i.e. consistent element ordering based on collection population)
@@ -284,15 +284,15 @@ Method | Worst Case | Best case | Notes
 
 - **Analysis**
   - Could do better: is there a way to implement a Queue using an array in constant time?
-    - Yes, only use the `Array#push` and `Array#pop` operations for the Queue. But, in the best case scenario, - this is amortized constant time.
+    - Yes, only use the `Array#push` and `Array#pop` operations for the Queue. But, this is amortized constant time.
     - See `NaiveArrayQueue` vs `BetterArrayQueue` linked at the end of this section.
-  - Could still do better with Doubly Linked List.
+  - Could still do better with Doubly-Linked List.
 
 2\) **Doubly Linked List**
-- A Queue can be implemented as a Doubly Linked List by just enforcing constraints on it that only allow you to add to the back, delete from the front and peek at the first element in the front of the Queue.
+- A Queue can be implemented as a Doubly-Linked List by just enforcing constraints on it that only allow you to add to the back, delete from the front and peek at the first element in the front of the Queue.
 
 - **Analysis**
-  - Doubly Linked List is the superior implementation - pure constant runtime.
+  - Doubly-Linked List is the superior implementation - pure constant runtime.
 
 ### Usage
 - Printing queues.
