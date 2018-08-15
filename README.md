@@ -363,12 +363,12 @@ Method | Avg. Case| Worst Case | Best Case | Notes
      / \
     1   3
     ```
-    
+
 - **Time Complexity**
 
 Method | Avg. Case| Worst Case | Best Case | Notes
 ---    | ---      | ---        | ---       | ---
-`add_child` | log(n) | O(n)     |  O(1)    | Avg. Case: you can only add from the root so it has to find the correct node to add to either from the left or right. Refer to this method by avg. case. Worst Case: tree is one-sided so you can't take advantage of the logarithmic property of this tree type.
+`add_child` | log(n) | O(n)     |  O(1)    | Refer to this method by the Avg. Case: you can only add from the root so it has to find the correct node to add to either from the left or right. Worst Case: the tree is one-sided so you can't take advantage of the logarithmic property of this tree type.
 `remove_child` | log(n) | O(n)  |  O(1)    |
 `count` |     O(n)       |  O(n) |  O(1)   |
 
