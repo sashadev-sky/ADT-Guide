@@ -17,7 +17,7 @@ end
 class DoublyLinkedList
   include Enumerable
 
-  # creating sentinal nodes as placeholders
+  # initializing sentinal nodes as placeholders
   def initialize
     @head = Node.new
     @tail = Node.new
