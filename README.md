@@ -188,7 +188,7 @@ Method | Avg. Case | Worst Case | Best Case | Notes
 `include?` | O(n) |   O(n)     |   O(1)    |
 `append` |   O(1)   |    O(1)    |   O(1)    | Assuming access to tail
 `prepend` | O(1)  |     O(1)   |     O(1)  | Assuming access to head
-`delete` |  O(n)  |     O(n)   |     O(1)  | Deletion is more efficient in Doubly-Linked List because we have a previous pointer, so we can easily access the node before the node being deleted to change its next pointer
+`delete` |  O(n)  |     O(n)   |     O(1)  | Deletion is more efficient in a Doubly-Linked List because we have a previous pointer, so we can easily access the node before the node being deleted to change its next pointer
 `empty?` | O(1)  |   O(1)      |   O(1)     | Only have to check if the head's next pointer is the tail
 `[]`     |  O(n) |    O(n)     |      O(1)  |
 `first`  |  O(1) |    O(1)     |    O(1)    |
