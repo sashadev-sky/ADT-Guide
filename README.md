@@ -90,7 +90,7 @@ Method    | Amortized   | Worst case  | Notes
 - Also called a `Dictionary`, `Associative Array` and `Hash Table`.
 
 ### Specifications
-- Unordered
+- Unordered (no promises regarding insertion order)
 - Duplicate values are allowed, but not duplicate keys
 
 ### API
@@ -102,7 +102,7 @@ Method    | Amortized   | Worst case  | Notes
 
 1\) **Hash Map** :
 - Hash Map vs. Hash Set
-> Hash Map implements the Map interface and Hash Set implements the Set interface. We will now store values for keys not just true or false. The main difference is that the Hash Map allows for duplicate values (but not keys) and the Hash Set does not.
+> Hash Map implements the Map interface and Hash Set implements the Set interface. In the implementation, we will now store values for keys not just true or false. The main difference is that the Hash Map allows for duplicate values (but not keys) and the Hash Set does not.
 - **Time Complexity**
 
 Method    | Amortized   | Worst Case  | Notes
