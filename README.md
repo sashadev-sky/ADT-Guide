@@ -50,7 +50,7 @@ Method    | Avg. Case |Worst Case | Best Case  | Notes
 
 - **Analysis**
   - Could do better. The array's fastest operation is indexing and that is not used.
-    - Possible modifications:
+    - Modifications:
       - a\) Restrict data type to only integers that live in a predefined range. Their value will correspond to an index in the array and the value at that index will correspond to its presence (either true or false) -> Improved time complexity O(1), abysmal space complexity O(range).
          - e.g., the set { 0, 2, 3 } will be stored as [true, false, true, true]
       - b\) Building on point a: augment to store sub-arrays (buckets) instead of indices for the values. Resize the array by a constant multiple that scales with the number of buckets -> Improved space complexity O(n).
