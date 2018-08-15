@@ -368,7 +368,7 @@ Method | Avg. Case| Worst Case | Best Case | Notes
 
 Method | Avg. Case| Worst Case | Best Case | Notes
 ---    | ---      | ---        | ---       | ---
-`add_child` | log(n) | O(n)     |  O(1)    | Refer to this method by the Avg. Case: you can only add from the root so it has to find the correct node to add to either from the left or right. Worst Case: the tree is one-sided so you can't take advantage of the logarithmic property of this tree type.
+`add_child` | log(n) | O(n)     |  O(1)    | Refer to this method by the Avg. Case: you can only add from the root so it has to find the correct node to add to either from the left or right. Worst Case: the tree is one-sided so you can't take advantage of the logarithmic property of this tree type
 `remove_child` | log(n) | O(n)  |  O(1)    |
 `count` |     O(n)       |  O(n) |  O(1)   |
 
@@ -378,7 +378,7 @@ Method | Avg. Case| Worst Case | Best Case | Notes
 
 2\) **N-ary Tree (Poly Tree)**
 - Can have an arbitrary number of children.
-- Does not have the additional restrictions of the search tree above.
+- Does not have the additional restriction of the search tree above.
 - Note: complexities for the Poly Tree and Binary Tree are the same.
 
 - **Time Complexity**
@@ -389,7 +389,7 @@ Method | Avg. Case| Worst Case | Best Case | Notes
 `remove_child` | O(n) | O(n)   | O(n)      |
 `count` |  O(n)    |     O(n)   |    O(1)  |
 
-- Note: Time complexities assume you are calling these methods on the root node.
+  - Note: Time complexities assume you are calling these methods on the root node.
 
 - **Space Complexity**: O(n)
 
