@@ -2,7 +2,7 @@
 
 > Abstract data types (ADTs) refer to classes of objects whose operations and properties are formally defined, but are not restricted to specific implementations.
 
-This is a repository of ADTs, written for Ruby. It is an exercise in implementing abstract data structures in my own code and a guide for practical application in the future.
+This is a repository of ADTs, written in Ruby. It is an exercise in implementing abstract data structures in my own code and a guide for practical application in the future.
 
 It is not intended to cover all of the API variations and implementations for a particular abstract data structure.
 
