@@ -168,7 +168,6 @@ Method    | Avg. Case | Worst Case | Best Case   | Notes
 - `last`: returns the last element
 
 ### Sub-Types
-- Note the implementation below applies to both Linked List types listed below.
 
 1\) **Singly-Linked List**
 
@@ -176,7 +175,8 @@ Method    | Avg. Case | Worst Case | Best Case   | Notes
   - Singly-Linked List with augmentations: add a previous attribute for the nodes.
 
 ### Implementation
-- Using a **Node class**
+- This implementation applies to both Linked List types mentioned above
+- Implemented using a **Node class**
   - A Linked List is often referred to as a `node-based data structure`.
     - Trees also fall into this category.
 - The time and space complexities below refer to this implementation.
