@@ -222,7 +222,7 @@ Method | Avg. Case | Worst Case | Best Case | Notes
 
 ### API
 - `push(el)`: adds an element to the top of the Stack
-- `pop`: removes the top in the Stack and returns it
+- `pop`: removes the top element in the Stack and returns it
 - `peek`: returns the top element in the Stack
 
 ### Implementations:
@@ -242,7 +242,7 @@ Method  |  Worst Case | Notes
 - A Stack can be implemented as a Doubly Linked List by just enforcing constraints on it that only allow insertion, removal, and peeking at the tail.
 
 - **Analysis**:
-- Implementing a Stack with an array or Linked List will have the same space and time complexities asymptotically.
+  - Implementing a Stack with an array or Linked List will have the same space and time complexities asymptotically.
 
 ### Usage:
 - Used in recursion to keep track of the stack frame.
