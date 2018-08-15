@@ -306,21 +306,21 @@ Method | Worst Case | Best case | Notes
 > A **Tree** data structure is used to store hierarchical data (it is non-linear). It contains nodes where each node has a parent-child relationship.
 
 ### Terminology
-- **depth of tree**: deepest path from leaf to node.
-  - Also referred to as **levels**.
-- **root**: top level node.
-- **leaf**: a node with no children.
-- nodes in the same row are **siblings**.
-- if a node connects to other nodes, then the preceding node is the **parent** and the nodes following it are **child** nodes.
-- **subtree**: consisted of a node and all of its **descendants**.
+- **depth of tree**: deepest path from leaf to node
+  - Also referred to as **levels**
+- **root**: top level node
+- **leaf**: a node with no children
+- nodes in the same row are **siblings**
+- if a node connects to other nodes, then the preceding node is the **parent** and the nodes following it are **child** nodes
+- **subtree**: consists of a node and all of its **descendants**
 
 ### Specifications
 - Directional (root to leaves)
-- Each child node must have a parent and only 1 parent
+- Each child node must have a parent and only one parent
 
 ### API
-- `add_child(node)`: add a child node to a parent
-- `remove_child(node)`: remove a child node from a parent (set the child's parent to nil)
+- `add_child(node)`: adds a child node to a parent
+- `remove_child(node)`: removes a child node from a parent
 - `count`: returns the count of nodes starting from the passed in node and including all of its descendants
 
 ### Implementation
@@ -331,11 +331,11 @@ Method | Worst Case | Best case | Notes
 
 ### Sub-Types
 - The sub-types are determined by the maximum number of children, not the number of children at any particular node.
-- Note: the implementation above is generalized to apply to all types of the tree data structure. For specific implementations, augment to include the restrictions for each type.
+- Note: the implementation above is generalized to apply to all types of the tree data structure. For specific implementations, augment to include the below restrictions for each type.
 
 1\) **Binary Tree**:
-- Binary Tree has max 2 children, but any node can have either zero, one, or two children.
-- No notion of order: note the below example can really be in any order.
+- Binary Tree has maximum 2 children, but any node can have either zero, one, or two children.
+- No notion of order: note the nodes in the below example can really be in any order.
 
     ```
       1
@@ -355,13 +355,15 @@ Method | Avg. Case| Worst Case | Best Case | Notes
 - **Space Complexity**: O(n)
 
 1a\) **Binary Search Trees**
-- An extension of the Binary Tree with the addition of two restrictions:
-  - The children nodes are stored in a specific order: the left subtree of a node only contains values less than itself and the right subtree only contains values greater than it.
+- An extension of the Binary Tree with the addition of a restriction:
+  - The child nodes are stored in a specific order: the left subtree of a node only contains values less than itself and the right subtree only contains values greater than it.
+
     ```
       2
      / \
     1   3
     ```
+    
 - **Time Complexity**
 
 Method | Avg. Case| Worst Case | Best Case | Notes
