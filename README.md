@@ -355,6 +355,7 @@ Method | Avg. Case| Worst Case | Best Case | Notes
 - **Space Complexity**: O(n)
 
 1a\) **Binary Search Trees**
+- Used for searching
 - An extension of the Binary Tree with the addition of a restriction:
   - The child nodes are stored in a specific order: the left subtree of a node only contains values less than itself and the right subtree only contains values greater than it.
 
