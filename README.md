@@ -396,7 +396,7 @@ Method | Avg. Case| Worst Case | Best Case | Notes
 
 ### Usefulness
 - Binary Search Tree: maintains order and has fast search, insertion and deletion.
-  - Used on databases to perform quick searches.
+  - Used on databases to perform quick searches (e.g., indexing in Rails used a sorted tree to make lookup time go from linear to logarithmic)
 - The others are useful for storing data:
   - Operating Systems use tree structure to store files.
   - HTML `DOM` uses a tree data structure to represent the hierarchy of elements.
