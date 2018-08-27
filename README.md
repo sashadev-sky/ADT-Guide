@@ -116,7 +116,7 @@ Method    | Amortized   | Worst case  | Notes
 > Hash Map implements the Map interface and Hash Set implements the Set interface. In the implementation, we will now store values for keys not just true or false. The main difference is that the Hash Map allows for duplicate values (but not keys) and the Hash Set does not.
 
 - For the Hash Map implementation, all of the internals will basically be the same, but we will use a Doubly Linked List for our buckets instead of sub-arrays so that we can use link objects that store both a key and a value in one node together.
-  - We could also just use 2d arrays, but the Linked List is the classic, canonical way to implement a Hash Map.
+  - We could also just use touples, but the Linked List is the classic, canonical way to implement a Hash Map.
 - **Time Complexity**
 
 Method    | Amortized   | Worst Case  | Notes
@@ -129,7 +129,7 @@ Method    | Amortized   | Worst Case  | Notes
 
 - Note: the time and space complexities are the same as for the Hash Set.
 
-2\) **2D Array**:
+2\) **2D array-based Map**:
 - Also called a `touple`.
 - The array will contain several subarrays, and each subarray will contain a k,v pair.
 - **Time Complexity**
@@ -152,7 +152,7 @@ Method    | Avg. Case | Worst Case | Best Case   | Notes
 
 [Map - hash map implementation](./lib/hash_map.rb)
 
-[Map - 2D array implementation](./lib/array_map.rb)
+[Map - 2D array-based implementation](./lib/array_map.rb)
 
 -------------------------------------------------
 
