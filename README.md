@@ -115,7 +115,8 @@ Method    | Amortized   | Worst case  | Notes
 - Hash Map vs. Hash Set
 > Hash Map implements the Map interface and Hash Set implements the Set interface. In the implementation, we will now store values for keys not just true or false. The main difference is that the Hash Map allows for duplicate values (but not keys) and the Hash Set does not.
 
-- for the Hash Map implementation, all of the internals will basically be the same, but we will use a Doubly Linked List for our buckets instead of sub-arrays so that we can use link objects that store both a key and a value in one node together.
+- For the Hash Map implementation, all of the internals will basically be the same, but we will use a Doubly Linked List for our buckets instead of sub-arrays so that we can use link objects that store both a key and a value in one node together.
+  - We could also just use 2d arrays, but the Linked List is the classic, canonical way to implement a Hash Map.
 - **Time Complexity**
 
 Method    | Amortized   | Worst Case  | Notes
@@ -148,7 +149,6 @@ Method    | Avg. Case | Worst Case | Best Case   | Notes
 
 ### Usefulness
  - Useful when you want to store values associated with keys.
- - A classic example of how data structures can be augmented to achieve efficient time complexities across different operations: LRU cache - a Hash Map is used together with a doubly-linked list to take advantage of its O(1) insertion and deletion times.
 
 [Map - hash map implementation](./lib/hash_map.rb)
 [Map - 2D array implementation](./lib/array_map.rb)
@@ -223,8 +223,9 @@ Method | Avg. Case | Worst Case | Best Case | Notes
 
 ### Usage
 - The advantage of the Linked List is that the values are stable: they don't correspond to indices so you never need to re-index.
-  - If you are building an `LRU Cache` you're prepending to the List so you can do this in constant time O(1) with the Linked List but with an array it would take linear time O(n).
+  - If you are building an `LRU Cache` the Linked List is essential as an auxiliary structure for its quick insertion and deletion time O(1). You never need to index because always delete from the beginning or end. The Hash Map on its own would be slower: O(n) because it would have to iterate to find the key with the most recent timestamp value since it is unordered. With an array as the auxiliary structure these operations would still take O(n) time because you would be stuck re-indexing.
 - Also useful in general if you are deleting many items: it will be faster than with an array, but doesn't make a difference in the time complexity asymptotically.
+- The disadvantage over an array is that indexing (`[]`) is slow
 
 [Doubly-Linked List - Node class implementation](./lib/linked_list.rb)
 
