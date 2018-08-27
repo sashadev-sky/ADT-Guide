@@ -56,7 +56,7 @@ Method    | Avg. Case |Worst Case | Best Case  | Notes
       - Improved time complexity O(1), abysmal space complexity O(range)
     - b\) Building on point a: augment to store sub-arrays (buckets) instead of T/F for the values. When we insert an integer into the set, use the modulo operator to deterministically assign every integer to a bucket: `index = integer_val % num_buckets`
       - Augmented to keep track of an arbitrary range of integers, including negative integers
-      - array is still fixed size
+      - Array is still fixed size
       - Fine for smaller sample sizes, but as our sample size increases will rely more and more on an array scan - O(n) time complexity - which were trying to avoid
       - Improved space complexity O(n)
     - c\) Building on point b: resize the array by a constant multiple that scales with the number of buckets. The goal is to have `buckets.length > N` at all times
@@ -86,7 +86,7 @@ Method    | Amortized   | Worst case  | Notes
 ### Usefulness
 - The Hash Set is useful if you want to ensure absolutely no duplicates - Hash Maps can have duplicate values (but not keys).
 
-
+[Set - Array implementations](./lib/array_set.rb)
 [Set - hash implementation](./lib/hash_set.rb)
 
 -------------------------------------------------
