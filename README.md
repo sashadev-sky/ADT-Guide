@@ -105,7 +105,7 @@ Method    | Amortized   | Worst case  | Notes
 - Duplicate values are allowed, but not duplicate keys
 
 ### API
-- `get(k)`: queries for a key-value pair
+- `get(k)`: queries for a key-value pair and returns the value
 - `set(k, v)`: creates a new key-value pair or updates the value for a pre-existing key
 - `delete(k)`: deletes a key-value pair
 
@@ -150,7 +150,7 @@ Method    | Avg. Case | Worst Case | Best Case   | Notes
  - Useful when you want to store values associated with keys.
  - A classic example of how data structures can be augmented to achieve efficient time complexities across different operations: LRU cache - a Hash Map is used together with a doubly-linked list to take advantage of its O(1) insertion and deletion times.
 
-[Map - doubly-linked list implementation](./lib/hash_map.rb)
+[Map - hash map implementation](./lib/hash_map.rb)
 [Map - 2D array implementation](./lib/array_map.rb)
 
 -------------------------------------------------
