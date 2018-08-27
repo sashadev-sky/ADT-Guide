@@ -29,9 +29,6 @@ Note that many of the ADTs have their own nomenclature, so the same methods may 
 - `insert(el)`: inserts a new element
 - `include?(el)`: queries for an element
 - `delete(el)`: removes an element
-- `union(s2)`: returns a new set combining the elements from two provided sets
-- `intersection(s2)`: returns a new set containing elements that are in both provided sets
-- `difference(s2)`: returns a new set containing elements that are from the current set that don't exist in the provided set
 
 ### Implementations
 
@@ -64,8 +61,12 @@ Method    | Avg. Case |Worst Case | Best Case  | Notes
       - Improved time complexity O(1) amortized, space complexity stays at O(n)
 
 2\) **Hash Set**
-- Use a hash as storage
-> Note: this is exactly how Sets are implemented in Ruby through the built-in Set library. They use a hash set under the hood.
+- A Hash Set uses a hash function to compute an index into an array of buckets (sub-arrays)
+- This will be a simple improvement to modification c from the Array Set implementations above:
+  - Modulo the hash of every item (returns an integer) by the # of buckets instead of the original integer value.
+- With this simple construction, the set will be able to handle a set of keys of any data type in Ruby that can be hashed.
+  - e.g., { 2, 4, 8, 16, “hello”, “dolly” }
+> Note: Sets are implemented in Ruby, through the built-in Set library, by using a hash set under the hood.
 - **Time Complexity**
 
 Method    | Amortized   | Worst case  | Notes
@@ -81,12 +82,13 @@ Method    | Amortized   | Worst case  | Notes
 
 - **Analysis**:
   - A Hash Set is the fastest implementation of a Set: the hash uses a hashing function to store elements in memory and to later access where they are stored.
+    - This creates the highest chance of uniform distribution because there is no pattern to the output, although there is still the chance of a hash collision.  
     - We want to use a Hash Set over an array-based set most of the time.
 
 ### Usefulness
 - The Hash Set is useful if you want to ensure absolutely no duplicates - Hash Maps can have duplicate values (but not keys).
 
-[Set - Array implementations](./lib/array_set.rb)
+[Set - array implementations](./lib/array_set.rb)
 
 [Set - hash implementation](./lib/hash_set.rb)
 

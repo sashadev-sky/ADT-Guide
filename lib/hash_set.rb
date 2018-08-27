@@ -1,54 +1,45 @@
-# this code is an implementation for a general Set
-
 class HashSet
-  def initialize
-    @members = {}
+  attr_reader :count
+
+  def initialize(num_buckets = 8)
+    @store = Array.new(num_buckets) { Array.new }
+    @count = 0
   end
 
-  def insert(el)
-    members[el] = true
+  def insert(key)
+    return false if include?(key)
+    self[key.hash] << key
+    @count += 1
+    resize! if num_buckets < @count
+
+    key
   end
 
-  def include?(el)
-    members.include?(el)
+  def include?(key)
+    self[key.hash].include?(key)
   end
 
-  def delete(el)
-    members.delete(el)
-    members.keys
+  def remove(key)
+    return nil unless include?(key)
+    self[key.hash].delete(key)
+    @count -= 1
   end
 
-  def show
-    members.keys
+  private
+
+  def num_buckets
+    @store.length
   end
 
-  def union(set2)
-    new_set = self.class.new
-    self.members.each_key { |el| new_set.insert(el) }
-    set2.members.each_key { |el| new_set.insert(el) }
-    new_set
+  def resize!
+    old_store = @store
+    @count = 0
+    @store = Array.new(num_buckets * 2) { Array.new }
+
+    old_store.flatten.each { |key| insert(key) }
   end
 
-  def intersection(set2)
-    new_set = self.class.new
-    self.members.each_key { |el| new_set.insert(el) if set2.include?(el) }
-    new_set
+  def [](num)
+    @store[num % num_buckets]
   end
-
-  def difference(set2)
-    new_set = self.class.new
-    self.members.each_key { |el| new_set.insert(el) unless set2.include?(el) }
-    new_set
-  end
-
-  # `==` returns true if object is a `HashSet`, is the same size as the current set,
-  # and each of it members is a member of the current set.
-  def ==(object)
-    object.is_a?(HashSet) && object.members == self.members
-  end
-
-  protected
-
-  attr_reader :members
-
 end
