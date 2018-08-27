@@ -50,10 +50,18 @@ Method    | Avg. Case |Worst Case | Best Case  | Notes
 
 - **Analysis**
   - Could do better. The array's fastest operation is indexing and that is not used.
-    - Modifications:
-      - a\) Restrict data type to only integers that live in a predefined range. Their value will correspond to an index in the array and the value at that index will correspond to its presence (either true or false) -> Improved time complexity O(1), abysmal space complexity O(range).
-         - e.g., the set { 0, 2, 3 } will be stored as [true, false, true, true]
-      - b\) Building on point a: augment to store sub-arrays (buckets) instead of indices for the values. Resize the array by a constant multiple that scales with the number of buckets -> Improved space complexity O(n).
+  - Modifications:
+    - a\) Restrict data type to only integers that live in a predefined range (the array is fixed size). Their value will correspond to an index in the array and the value at that index will correspond to its presence (either true or false)
+      - e.g., the set { 0, 2, 3 } will be stored as [true, false, true, true]
+      - Improved time complexity O(1), abysmal space complexity O(range)
+    - b\) Building on point a: augment to store sub-arrays (buckets) instead of T/F for the values. When we insert an integer into the set, use the modulo operator to deterministically assign every integer to a bucket: `index = integer_val % num_buckets`
+      - Augmented to keep track of an arbitrary range of integers, including negative integers
+      - array is still fixed size
+      - Fine for smaller sample sizes, but as our sample size increases will rely more and more on an array scan - O(n) time complexity - which were trying to avoid
+      - Improved space complexity O(n)
+    - c\) Building on point b: resize the array by a constant multiple that scales with the number of buckets. The goal is to have `buckets.length > N` at all times
+      - The array is no longer a fixed size.
+      - Improved time complexity O(1) amortized, space complexity stays at O(n)
 
 2\) **Hash Set**
 - Use a hash as storage
@@ -73,7 +81,7 @@ Method    | Amortized   | Worst case  | Notes
 
 - **Analysis**:
   - A Hash Set is the fastest implementation of a Set: the hash uses a hashing function to store elements in memory and to later access where they are stored.
-    - We want to use a Hash Set over an array-based set most of the time because hashes don't need to examine every element for inclusion.
+    - We want to use a Hash Set over an array-based set most of the time.
 
 ### Usefulness
 - The Hash Set is useful if you want to ensure absolutely no duplicates - Hash Maps can have duplicate values (but not keys).
@@ -135,6 +143,7 @@ Method    | Avg. Case | Worst Case | Best Case   | Notes
 
 ### Usefulness
  - Useful when you want to store values associated with keys.
+ - A classic example of how data structures can be augmented to achieve efficient time complexities across different operations: LRU cache - a Hash Map is used together with a doubly-linked list to take advantage of its O(1) insertion and deletion times.
 
 [Map - 2D array implementation](./lib/array_map.rb)
 
@@ -188,14 +197,15 @@ Method | Avg. Case | Worst Case | Best Case | Notes
 `include?` | O(n) |   O(n)     |   O(1)    |
 `append` |   O(1)   |    O(1)    |   O(1)    | Assuming access to tail
 `prepend` | O(1)  |     O(1)   |     O(1)  | Assuming access to head
-`delete` |  O(n)  |     O(n)   |     O(1)  | Deletion is more efficient in a Doubly-Linked List because we have a previous pointer, so we can easily access the node before the node being deleted to change its next pointer
+`delete` |  O(n)  |     O(n)   |     O(1)  | Deletion is more efficient in a Doubly-Linked List than Singly because we have a previous pointer, so we can easily access the node before the node being deleted to change its next pointer
 `empty?` | O(1)  |   O(1)      |   O(1)     | Only have to check if the head's next pointer is the tail
 `[]`     |  O(n) |    O(n)     |      O(1)  |
 `first`  |  O(1) |    O(1)     |    O(1)    |
 `last`  |  O(1) |    O(1)     |    O(1)     |
 
 
-- Note: insertion anywhere other than the beginning or end of the List would be O(n).
+- Note: insertion / deletion anywhere other than the beginning or end would be O(n) (assuming you don't have a pointer / reference to the node) because it has to search the LinkedList for that node. But, that's not what we often use the Linked List for. The LinkedList is best for adding and removing elements sequentially.
+  - **So insertion and deletion are often summarized as O(1) assuming that the LinkedList is used in its optimal way (e.g., LRU cache)**
 
 - **Space Complexity**: O(n)
   - Space complexity for a Doubly-Linked List is more than a Singly-Linked List because were storing an extra link to a node, but it doesn't change it asymptotically (still linear).
