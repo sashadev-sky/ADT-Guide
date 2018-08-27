@@ -32,7 +32,7 @@ Note that many of the ADTs have their own nomenclature, so the same methods may 
 
 ### Implementations
 
-1\) **Array Set**
+1\) **Array-Based Set**
 - Use an array as storage
 - Don't allow it to be indexed into
 - **Time Complexity**
@@ -62,9 +62,9 @@ Method    | Avg. Case |Worst Case | Best Case  | Notes
 
 2\) **Hash Set**
 - A Hash Set uses a hash function to compute an index into an array of buckets (sub-arrays)
-- This will be a simple improvement to modification c from the Array Set implementations above:
+- This will be a simple improvement to modification c from the array-based set implementations above:
   - Modulo the hash of every item (returns an integer) by the # of buckets instead of the original integer value.
-- With this simple construction, the set will be able to handle a set of keys of any data type in Ruby that can be hashed.
+- With this simple construction, the set will be able to handle keys of any data type that can be hashed.
   - e.g., { 2, 4, 8, 16, “hello”, “dolly” }
 > Note: Sets are implemented in Ruby, through the built-in Set library, by using a hash set under the hood.
 - **Time Complexity**
