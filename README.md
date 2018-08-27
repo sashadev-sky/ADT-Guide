@@ -151,6 +151,7 @@ Method    | Avg. Case | Worst Case | Best Case   | Notes
  - Useful when you want to store values associated with keys.
 
 [Map - hash map implementation](./lib/hash_map.rb)
+
 [Map - 2D array implementation](./lib/array_map.rb)
 
 -------------------------------------------------
