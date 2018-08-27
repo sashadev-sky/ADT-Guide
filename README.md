@@ -87,6 +87,7 @@ Method    | Amortized   | Worst case  | Notes
 - The Hash Set is useful if you want to ensure absolutely no duplicates - Hash Maps can have duplicate values (but not keys).
 
 [Set - Array implementations](./lib/array_set.rb)
+
 [Set - hash implementation](./lib/hash_set.rb)
 
 -------------------------------------------------
