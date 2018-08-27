@@ -62,7 +62,7 @@ Method    | Avg. Case |Worst Case | Best Case  | Notes
 
 2\) **Hash Set**
 - A Hash Set uses a hash function to compute an index into an array of buckets (sub-arrays)
-- This will be a simple improvement to modification c from the array-based set implementations above:
+- This implementation will be a simple improvement to "modification c" from the array-based set implementations above:
   - Modulo the hash of every item (returns an integer) by the # of buckets instead of the original integer value.
 - With this simple construction, the set will be able to handle keys of any data type that can be hashed.
   - e.g., { 2, 4, 8, 16, “hello”, “dolly” }
@@ -114,6 +114,8 @@ Method    | Amortized   | Worst case  | Notes
 1\) **Hash Map** :
 - Hash Map vs. Hash Set
 > Hash Map implements the Map interface and Hash Set implements the Set interface. In the implementation, we will now store values for keys not just true or false. The main difference is that the Hash Map allows for duplicate values (but not keys) and the Hash Set does not.
+
+- for the Hash Map implementation, all of the internals will basically be the same, but we will use a Doubly Linked List for our buckets instead of sub-arrays so that we can use link objects that store both a key and a value in one node together.
 - **Time Complexity**
 
 Method    | Amortized   | Worst Case  | Notes
@@ -148,6 +150,7 @@ Method    | Avg. Case | Worst Case | Best Case   | Notes
  - Useful when you want to store values associated with keys.
  - A classic example of how data structures can be augmented to achieve efficient time complexities across different operations: LRU cache - a Hash Map is used together with a doubly-linked list to take advantage of its O(1) insertion and deletion times.
 
+[Map - doubly-linked list implementation](./lib/hash_map.rb)
 [Map - 2D array implementation](./lib/array_map.rb)
 
 -------------------------------------------------
@@ -170,14 +173,16 @@ Method    | Avg. Case | Worst Case | Best Case   | Notes
 - Duplicates permitted
 
 ### API
-- `include?(el)`: returns boolean indicating whether the element is in the List
-- `append(el)`: appends an element
-- `prepend(el)`: prepends an element
-- `delete(el)`: removes an element
+- `include?(key)`: returns boolean indicating whether the node is in the List
+- `append(key, value)`: appends a node
+- `prepend(key, value)`: prepends a node
+- `remove(key)`: removes a node
 - `empty?`: returns boolean indicating whether the List is empty
-- `[](index)`: returns the element at a specified index or nil if the element is not in the List
-- `first`: returns the first element
-- `last`: returns the last element
+- `[](index)`: returns the node at a specified index or nil if the node is not in the List
+- `get(key)`: returns the value of the node at a specified index or nil if the node is not in the List
+- `update(key, value)`: updates the value for a node and returns that node or nil if the node is not in the List
+- `first`: returns the first node
+- `last`: returns the last node
 
 ### Sub-Types
 
@@ -200,14 +205,17 @@ Method | Avg. Case | Worst Case | Best Case | Notes
 `include?` | O(n) |   O(n)     |   O(1)    |
 `append` |   O(1)   |    O(1)    |   O(1)    | Assuming access to tail
 `prepend` | O(1)  |     O(1)   |     O(1)  | Assuming access to head
-`delete` |  O(n)  |     O(n)   |     O(1)  | Deletion is more efficient in a Doubly-Linked List than Singly because we have a previous pointer, so we can easily access the node before the node being deleted to change its next pointer
+`remove` |  O(n)  |     O(n)   |     O(1)  | Deletion is more efficient in a Doubly-Linked List than Singly because we have a previous pointer, so we can easily access the node before the node being deleted to change its next pointer
 `empty?` | O(1)  |   O(1)      |   O(1)     | Only have to check if the head's next pointer is the tail
 `[]`     |  O(n) |    O(n)     |      O(1)  |
+`get`    |  O(n) |   O(n)      |    O(1)     |
+`update` |  O(n) |  O(n)      |   O(1)      |
 `first`  |  O(1) |    O(1)     |    O(1)    |
 `last`  |  O(1) |    O(1)     |    O(1)     |
 
 
-- Note: insertion / deletion anywhere other than the beginning or end would be O(n) (assuming you don't have a pointer / reference to the node) because it has to search the LinkedList for that node. But, that's not what we often use the Linked List for. The LinkedList is best for adding and removing elements sequentially.
+
+- Note: insertion / deletion anywhere other than the beginning or end would only be O(n) (assuming you don't have a pointer / reference to the node) because it has to search the LinkedList for that node. But, that's not what we often use the Linked List for. The LinkedList is best for adding and removing elements sequentially.
   - **So insertion and deletion are often summarized as O(1) assuming that the LinkedList is used in its optimal way (e.g., LRU cache)**
 
 - **Space Complexity**: O(n)

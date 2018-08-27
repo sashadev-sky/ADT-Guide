@@ -1,15 +1,16 @@
 class Node
 
-  attr_accessor :val, :next_node, :prev_node
+  attr_accessor :key, :val, :next_node, :prev_node
 
-  def initialize(val = nil, next_node = nil, prev_node = nil)
+  def initialize(key = nil, val = nil, next_node = nil, prev_node = nil)
+    @key = key
     @val = val
     @next_node = next_node
     @prev_node = prev_node
   end
 
   def to_s
-    "#{@val}"
+    "#{@key}: #{@val}"
   end
 
 end
@@ -35,7 +36,7 @@ class DoublyLinkedList
       return nil if current_node == tail
     end
 
-    current_node.val
+    current_node
   end
 
   def empty?
@@ -43,46 +44,60 @@ class DoublyLinkedList
   end
 
   def first
-    empty? ? nil : head.next_node.val
+    empty? ? nil : head.next_node
   end
 
   def last
-    empty? ? nil : tail.prev_node.val
+    empty? ? nil : tail.prev_node
   end
 
-  def include?(element)
+  def get(key)
+    each { |node| return node.val if node.key == key }
+    nil
+  end
+
+  def update(key, value)
+    each do |node|
+      if node.key == key
+        node.val = value
+        return node
+      end
+    end
+  end
+
+  def include?(key)
     node_scan1 = head.next_node
 
     until node_scan1 == tail
-      return true if node_scan1.val == element
+      return true if node_scan1.key == key
       node_scan1 = node_scan1.next_node
     end
     false
   end
 
-  def append(element)
-    el = Node.new(element, tail)
+  def append(key, value)
+    el = Node.new(key, value, tail)
     last_node = tail.prev_node
     last_node.next_node = el
     el.prev_node = last_node
     tail.prev_node = el
-    el.val
+    el
   end
 
-  def prepend(element)
-    el = Node.new(element, nil, head)
+  def prepend(key, value)
+    el = Node.new(key, value, nil, head)
     first_node = head.next_node
     first_node.prev_node = el
     el.next_node = first_node
     head.next_node = el
-    el.val
+    el
   end
 
-  def delete(element)
+  def remove(key)
     current_node = head.next_node
 
     until current_node == tail
-      if current_node.val == element
+      if current_node.key == key
         previous_node = current_node.prev_node
         next_next_node = current_node.next_node
         previous_node.next_node = next_next_node
@@ -103,7 +118,7 @@ class DoublyLinkedList
   end
 
   def to_s
-    inject([]) { |acc, node| acc << "[#{node.val}]" }.join('->')
+    inject([]) { |acc, node| acc << "[#{node.key}, #{node.val}]" }.join(', ')
   end
 
   private
@@ -116,23 +131,28 @@ end
 
 if $PROGRAM_NAME == __FILE__
   list = DoublyLinkedList.new
-  list.append(3)
-  list.append(0)
-  list.append(2)
-  list.append(5)
-  list.append(5)
+  list.append("link1", 3)
+  list.append("link2", 0)
+  list.append("link3", 2)
+  list.append("link4", 5)
+  list.append("link5", 5)
   puts list[1]
   puts list[3]
   puts list
   puts list.first
   puts list.last
-  p list.include?(4)
-  p list.include?(1)
-  p list.include?(2)
-  p list.include?(8)
-  list.delete(1)
-  list.delete(2)
-  list.delete(3)
-  list.delete(4)
+  p list.include?("link9")
+  p list.include?("randomtext")
+  p list.include?("link3")
+  list.remove("link5")
+  list.remove("link4")
+  list.remove("link1")
+  p list.empty?
+  puts list.get("link2")
+  puts list.update("link35", 12)
+  puts list.update("link2", 9)
+  puts list.get("link2")
+  list.remove("link2")
+  list.remove("link3")
   p list.empty?
 end
