@@ -86,8 +86,12 @@ Method    | Amortized   | Worst case  | Notes
     - This creates the highest chance of uniform distribution because there is no pattern to the output, although there is still the chance of a hash collision.
     - We want to use a Hash Set over an array-based set most of the time.
   - **Although it isn’t particularly compact (requires preallocation of memory), it provides near constant time insertion and removal in the average case.**
-  - Unfortunately, the edge cases of Hash Set (and Hash Table - up next) performance are significant. They are comprised of pre-allocated buckets of fixed size, and due to speed requirements of typical non-cryptographic hash functions, collisions are inevitable. 
-    - <details><summary><strong>There are a number of different ways of handling collisions</strong></summary>
+
+### Usefulness
+- The Hash Set is useful if you want to ensure absolutely no duplicates - Hash Maps can have duplicate values (but not keys).
+- **Not ideal for runtime operations**: unfortunately, the edge cases of Hash Set (and Hash Table - up next) performance are significant, the cases are inevitable, and the methods for dealing with them require some runtime tuning.
+  - They are comprised of pre-allocated buckets of fixed size, and due to speed requirements of typical non-cryptographic hash functions, collisions are inevitable. 
+  - <details><summary><strong>There are a number of different ways of handling collisions</strong></summary>
         <ol>
           <li><strong>Chaining</strong>: In this case, collisions are resolved by using a second data structure (such as a <strong>linked list</strong>) to compare elements when a collision is found.
             <ul>
@@ -100,12 +104,12 @@ Method    | Amortized   | Worst case  | Notes
                <li>Might give us better general performance than linear probing on a busy / full table</li>
             </ul>
            </li>
+           <li>Several other methods also exist.</li>
          </ol>
        </details>
-     - Several other methods also exist. Fundamentally, the problem with these methods is that they require some level of runtime tuning. When the buckets require resizing, every element stored in the bucket must be re-hashed to find its new place. With millions of keys, this resize operation becomes prohibitively expensive. **(We basically have to double the table size of the table when we run out of space)**.
-
-### Usefulness
-- The Hash Set is useful if you want to ensure absolutely no duplicates - Hash Maps can have duplicate values (but not keys).
+  - When the buckets require resizing, every element stored in the bucket must be re-hashed to find its new place. With millions of keys, this resize operation becomes prohibitively expensive. **(We basically have to double the table size of the table when we run out of space)**. 
+  - **The fundamental problem with these methods is that they require some level of runtime tuning.** 
+       - For ex., for the [Fastly CDN](https://www.fastly.com/blog/surrogate-keys-part-2), the time required to complete this operation could cause it to pause for a significant period of time — significant enough to cause it to appear to “miss” purge requests for surrogate keys.
 
 [Set - array implementations](./lib/array_set.rb)
 
@@ -352,9 +356,11 @@ Method | Worst Case | Best case | Notes
   - Also referred to as **levels**
 - **root**: top level node
 - **leaf**: a node with no children
+ - Also referred to as a **terminal node** 
 - nodes in the same row are **siblings**
 - if a node connects to other nodes, then the preceding node is the **parent** and the nodes following it are **child** nodes
 - **subtree**: consists of a node and all of its **descendants**
+- **search tree**: an ordered tree data structure used to store a **dynamic set** or **associative array** where the keys are usually strings.
 
 ### Specifications
 - Directional (root to leaves)
@@ -436,12 +442,27 @@ Method | Avg. Case| Worst Case | Best Case | Notes
 
 - **Space Complexity**: O(n)
 
+3\) [**Trie**](https://en.wikipedia.org/wiki/Trie)
+- A kind of **search tree**.
+- Also called `digital tree` or `prefix tree`.
+- **Unlike a binary search tree**, no node in the tree stores the key associated with that node; instead, its position in the tree defines the key with which it is associated.
+  - All the descendants of a node have a common **prefix** of the string associated with that node, and the root is associated with the **empty string**.
+  - Keys tend to be associated with leaves, though some inner nodes may correspond to keys of interest. Hence, keys are not necessarily associated with every node. 
+
+
+4\) [**Radix Tree**](https://en.wikipedia.org/wiki/Radix_tree)
+- Also called a `radix trie` or `compact prefix tree`.
+- Represents a **space-optimized trie** in which each node that is the only child is merged with its parent. 
+
+4a) [**Crit-bit Tree**](http://cr.yp.to/critbit.html)
+- A condensed **radix trie**, generally yielding better performance due to the reduced number of pointers involved in maintaining nodes of the tree (and they’re significantly more compact than **trie** implementations requiring more pointers). 
+
 ### Usefulness
 - Binary Search Tree: maintains order and has fast search, insertion and deletion.
   - Used on databases to perform quick searches (e.g., indexing in Rails used a sorted tree to make lookup time go from linear to logarithmic)
 - The others are useful for storing data:
-  - Operating Systems use tree structure to store files.
+  - Operating Systems use a tree structure to store files.
   - HTML `DOM` uses a tree data structure to represent the hierarchy of elements.
-
+- **Crit-bit Tree**: used by the [Fastly CDN](https://www.fastly.com/blog/surrogate-keys-part-2) for its surrogate key functionality.
 
 [Tree - Poly Tree implementation](./lib/poly_tree.rb)
