@@ -74,16 +74,35 @@ Method    | Amortized   | Worst case  | Notes
 `include?`| O(1)        |   O(n)      | Worst case is in rare case of a hash collision
 `insert`  | O(1)        |   O(n)      | Worst case is in rare case of a hash collision
 `delete`  | O(1)        |   O(n)      | Worst case is in rare case of a hash collision
-
+  
   - Ruby handles a `hash collision` with `separate chaining`.
+  
   - The maximum `density` (# of items chained at a location in memory) Ruby allows before `rehashing` is 5, which is O(n) time complexity.
 
 - **Space Complexity**: O(n)
 
 - **Analysis**:
   - A Hash Set is the fastest implementation of a Set: the hash uses a hashing function to store elements in memory and to later access where they are stored.
-    - This creates the highest chance of uniform distribution because there is no pattern to the output, although there is still the chance of a hash collision.  
+    - This creates the highest chance of uniform distribution because there is no pattern to the output, although there is still the chance of a hash collision.
     - We want to use a Hash Set over an array-based set most of the time.
+  - **Although it isn’t particularly compact (requires preallocation of memory), it provides near constant time insertion and removal in the average case.**
+  - Unfortunately, the edge cases of Hash Set (and Hash Table - up next) performance are significant. They are comprised of pre-allocated buckets of fixed size, and due to speed requirements of typical non-cryptographic hash functions, collisions are inevitable. 
+    - <details><summary><strong>There are a number of different ways of handling collisions</strong></summary>
+        <ol>
+          <li><strong>Chaining</strong>: In this case, collisions are resolved by using a second data structure (such as a <strong>linked list</strong>) to compare elements when a collision is found.
+            <ul>
+              <li>This method “degrades gracefully,” but requires a good idea of the bucket size to do so.</li>
+            </ul>
+           </li>
+           <li><strong>Open addressing</strong>: Entries are all stored within the hash buckets, and when a collision is found, some probing algorithm is used to find the next free bucket. When free slots run low, the buckets are resized.</li>
+           <li><strong>Cuckoo hashing</strong>: Multiple hash functions are used to insert into different places in the bucket. If all hash functions collide, the bucket is resized.
+             <ul>
+               <li>Might give us better general performance than linear probing on a busy / full table</li>
+            </ul>
+           </li>
+         </ol>
+       </details>
+     - Several other methods also exist. Fundamentally, the problem with these methods is that they require some level of runtime tuning. When the buckets require resizing, every element stored in the bucket must be re-hashed to find its new place. With millions of keys, this resize operation becomes prohibitively expensive. **(We basically have to double the table size of the table when we run out of space)**.
 
 ### Usefulness
 - The Hash Set is useful if you want to ensure absolutely no duplicates - Hash Maps can have duplicate values (but not keys).
