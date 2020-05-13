@@ -426,6 +426,8 @@ Method | Avg. Case| Worst Case | Best Case | Notes
 
 - **Space Complexity**: O(n)
 
+Subtype: There is an auto-balancing binary search tree called **AVL tree** where every node also stores the number of children to its left and right and it uses that as a sort of balancing metric. When you insert, you can get it down to the worst case being log(n), and so you can actually get your inserts to maintain a balanced tree in log(n) every time.
+
 2\) **N-ary Tree (Poly Tree)**
 - Can have an arbitrary number of children.
 - Does not have the additional restriction of the search tree above.
