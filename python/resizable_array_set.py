@@ -10,9 +10,15 @@ class ResizableArray:
     # minimal size of the array (the size is not shrunk below this size)
     _MIN_SIZE = 10
 
-    def __init__(self):
+    def __init__(self, size=10):
         self.n = 0  # current actual size (number of elements)
-        self.size = ResizableArray._MIN_SIZE  # maximum memory size
+
+        # maximum memory size
+        if size >= ResizableArray._MIN_SIZE:
+            self.size = size
+        else:
+            self.size = ResizableArray._MIN_SIZE
+
         # allocate array
         self.store = [None for _ in range(ResizableArray._MIN_SIZE)]
 
@@ -24,8 +30,6 @@ class ResizableArray:
             if el == element:
                 return True
         return False
-
-    __contains__ = contains
 
     def add(self, element):
         """
@@ -82,7 +86,7 @@ class ResizableArray:
                 #     new_element_array.append(None)
             self.store = new_element_array
             self.size = len(new_element_array)
-        # grow array if there is more than then RESIZE_FACTOR_UP elements
+
         elif capacity_ratio >= ResizableArray.RESIZE_FACTOR_UP:
             for times in range(int(self.size * 1.5)):
                 self.store.append(None)
@@ -90,7 +94,7 @@ class ResizableArray:
             self.size = int(self.size * 1.5)
 
     def __str__(self):
-        return f'[{", ".join(map(str, self.store))}]'
+        return f'{{{", ".join(map(str, self.store))}}}'
 
     def __iter__(self):
         return iter(self.store)
@@ -106,8 +110,6 @@ if __name__ == '__main__':
     for i in range(40):
         list_set.add(i * 4)
         print(list_set)
-
-    print(type(list_set))
 
     print(list_set.contains(4))  # True
     print(list_set.contains(44))  # True
