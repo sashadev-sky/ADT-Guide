@@ -2,14 +2,15 @@
 
 > Abstract data types (ADTs) refer to classes of objects whose operations and properties are formally defined, but are not restricted to specific implementations.
 
-This is a repository of ADTs, written in Ruby. It is an exercise in implementing abstract data structures in my own code and a guide for practical application in the future.
+This is a repository of ADTs written in Ruby and, more recently, Python. It
+ is an
+ exercise in implementing abstract data structures in my own code and a guide for practical application in the future.
 
-It is not intended to cover all of the API variations and implementations for a particular abstract data structure.
+It is not intended to cover all the API variations and implementations for a particular abstract data structure.
 
 I define the following ADTs, including their specifications, common operations in their API, and possible implementations with comparisons. I also link my code at the bottom of each section.
 
 Note that many of the ADTs have their own nomenclature, so the same methods may have various names across the data types.
-
 
 - [Set](#set)
 - [Map](#map)
@@ -88,10 +89,15 @@ Method    | Amortized   | Worst case  | Notes
 ### Usefulness
 - The Hash Set is useful if you want to ensure absolutely no duplicates - Hash Maps can have duplicate values (but not keys).
 
-[Set - array implementations](./lib/array_set.rb)
+**Ruby**
 
-[Set - hash implementation](./lib/hash_set.rb)
+- [Set - array implementations](./ruby/array_set.rb)
 
+- [Set - hash implementation](./ruby/hash_set.rb)
+
+**Python**
+
+- [Set - array implementation](./python/resizable_array_set.py)
 -------------------------------------------------
 
 ## Map
@@ -150,9 +156,11 @@ Method    | Avg. Case | Worst Case | Best Case   | Notes
 ### Usefulness
  - Useful when you want to store values associated with keys.
 
-[Map - hash map implementation](./lib/hash_map.rb)
+**Ruby**
 
-[Map - 2D array-based implementation](./lib/array_map.rb)
+- [Map - hash map implementation](./ruby/hash_map.rb)
+
+- [Map - 2D array-based implementation](./ruby/array_map.rb)
 
 -------------------------------------------------
 
@@ -228,7 +236,9 @@ Method | Avg. Case | Worst Case | Best Case | Notes
 - Also useful in general if you are deleting many items: it will be faster than with an array, but doesn't make a difference in the time complexity asymptotically.
 - The disadvantage over an array is that indexing (`[]`) is slow
 
-[Doubly-Linked List - Node class implementation](./lib/linked_list.rb)
+**Ruby**
+
+- [Doubly-Linked List - Node class implementation](./ruby/linked_list.rb)
 
 -------------------------------------
 
@@ -272,7 +282,9 @@ Method  |  Worst Case | Notes
 - Used to write iterative quicksort.
 - Ideal as a temporary container for temporary data.
 
-[Stack - array implementation](./lib/array_stack.rb)
+**Ruby**
+
+- [Stack - array implementation](./ruby/array_stack.rb)
 
 -------------------------------------
 
@@ -286,7 +298,6 @@ Method  |  Worst Case | Notes
   - Data can only be removed from the front of a Queue (opposite behavior of Stack)
 - Sequential/Ordered (i.e. consistent element ordering based on collection population)
 - Duplicates permitted
-
 
 ### API
 - `enqueue(el)`: adds an element to the back of the Queue
@@ -321,7 +332,9 @@ Method | Worst Case | Best case | Notes
 - Printing queues.
 - Handling asynchronous requests - they ensure that the requests are processed in the order in which they are received.
 
-[Queue - array implementation](./lib/array_queue.rb)
+**Ruby**
+
+- [Queue - array implementation](./ruby/array_queue.rb)
 
 -------------------------------------
 
@@ -424,5 +437,6 @@ Method | Avg. Case| Worst Case | Best Case | Notes
   - Operating Systems use tree structure to store files.
   - HTML `DOM` uses a tree data structure to represent the hierarchy of elements.
 
+**Ruby**
 
-[Tree - Poly Tree implementation](./lib/poly_tree.rb)
+- [Tree - Poly Tree implementation](./ruby/poly_tree.rb)
