@@ -77,6 +77,7 @@ Method    | Amortized   | Worst case  | Notes
 `delete`  | O(1)        |   O(n)      | Worst case is in rare case of a hash collision
 
   - Ruby handles a `hash collision` with `separate chaining`.
+
   - The maximum `density` (# of items chained at a location in memory) Ruby allows before `rehashing` is 5, which is O(n) time complexity.
 
 - **Space Complexity**: O(n)
@@ -85,9 +86,34 @@ Method    | Amortized   | Worst case  | Notes
   - A Hash Set is the fastest implementation of a Set: the hash uses a hashing function to store elements in memory and to later access where they are stored.
     - This creates the highest chance of uniform distribution because there is no pattern to the output, although there is still the chance of a hash collision.  
     - We want to use a Hash Set over an array-based set most of the time.
+  - **Although it isn’t particularly compact (requires preallocation of memory), it provides near constant time insertion and removal in the average case.**
 
 ### Usefulness
 - The Hash Set is useful if you want to ensure absolutely no duplicates - Hash Maps can have duplicate values (but not keys).
+- **Not ideal for runtime operations**: unfortunately, the edge cases of Hash Set (and Hash Table - up next) performance are significant, the cases are inevitable, and the methods for dealing with them require some runtime tuning.
+  - They are comprised of pre-allocated buckets of fixed size, and due to speed requirements of typical non-cryptographic hash functions, collisions are inevitable. 
+  - <details><summary><strong>There are a number of different ways of handling collisions</strong></summary>
+        <ol>
+          <li><strong>Chaining</strong>: In this case, collisions are resolved by using a second data structure (such as a <strong>linked list</strong>) to compare elements when a collision is found.
+            <ul>
+              <li>This method “degrades gracefully,” but requires a good idea of the bucket size to do so.</li>
+            </ul>
+           </li>
+           <li><strong>Open addressing</strong>: Entries are all stored within the hash buckets, and when a collision is found, some probing algorithm is used to find the next free bucket. When free slots run low, the buckets are resized.</li>
+           <li><strong>Cuckoo hashing</strong>: Multiple hash functions are used to insert into different places in the bucket. If all hash functions collide, the bucket is resized.
+             <ul>
+               <li>Might give us better general performance than linear probing on a busy / full table</li>
+            </ul>
+           </li>
+           <li>Several other methods also exist.</li>
+         </ol>
+       </details>
+  - When the buckets require resizing, every element stored in the bucket must be re-hashed to find its new place. With millions of keys, this resize operation becomes prohibitively expensive. **(We basically have to double the table size of the table when we run out of space)**. 
+  - **The fundamental problem with these methods is that they require some level of runtime tuning.** 
+       - For ex., for the [Fastly CDN](https://www.fastly.com/blog/surrogate
+       - keys-part-2), the time required to complete this operation could
+        cause it to pause for a significant time period — significant enough to
+         cause it to appear to “miss” purge requests for surrogate keys.
 
 **Ruby**
 
@@ -346,9 +372,11 @@ Method | Worst Case | Best case | Notes
   - Also referred to as **levels**
 - **root**: top level node
 - **leaf**: a node with no children
+ - Also referred to as a **terminal node** 
 - nodes in the same row are **siblings**
 - if a node connects to other nodes, then the preceding node is the **parent** and the nodes following it are **child** nodes
 - **subtree**: consists of a node and all of its **descendants**
+- **search tree**: an ordered tree data structure used to store a **dynamic set** or **associative array** where the keys are usually strings.
 
 ### Specifications
 - Directional (root to leaves)
@@ -405,13 +433,15 @@ Method | Avg. Case| Worst Case | Best Case | Notes
 
 Method | Avg. Case| Worst Case | Best Case | Notes
 ---    | ---      | ---        | ---       | ---
-`add_child` | log(n) | O(n)     |  O(1)    | Refer to this method by the Avg. Case: you can only add from the root so it has to find the correct node to add to either from the left or right. Worst Case: the tree is one-sided so you can't take advantage of the logarithmic property of this tree type
+`add_child` | log(n) | O(n)     |  O(1)    | Refer to this method by the Avg. Case: you can only add from the root so it has to find the correct node to add to either from the left or right. log(n) where n is the height of the tree. Worst Case: the tree is one-sided (most extreme case of **unbalanced** - at this point it's pretty much just a linked list) so you can't take advantage of the logarithmic property of this tree type.
 `remove_child` | log(n) | O(n)  |  O(1)    |
 `count` |     O(n)       |  O(n) |  O(1)   |
 
 - Note: Time complexities assume you are calling these methods on the root node.
 
 - **Space Complexity**: O(n)
+
+Subtype: There is an auto-balancing binary search tree called **AVL tree** where every node also stores the number of children to its left and right and it uses that as a sort of balancing metric. When you insert, you can get it down to the worst case being log(n), and so you can actually get your inserts to maintain a balanced tree in log(n) every time.
 
 2\) **N-ary Tree (Poly Tree)**
 - Can have an arbitrary number of children.
@@ -430,12 +460,27 @@ Method | Avg. Case| Worst Case | Best Case | Notes
 
 - **Space Complexity**: O(n)
 
+3\) [**Trie**](https://en.wikipedia.org/wiki/Trie)
+- A kind of **search tree**.
+- Also called `digital tree` or `prefix tree`.
+- **Unlike a binary search tree**, no node in the tree stores the key associated with that node; instead, its position in the tree defines the key with which it is associated.
+  - All the descendants of a node have a common **prefix** of the string associated with that node, and the root is associated with the **empty string**.
+  - Keys tend to be associated with leaves, though some inner nodes may correspond to keys of interest. Hence, keys are not necessarily associated with every node. 
+
+4\) [**Radix Tree**](https://en.wikipedia.org/wiki/Radix_tree)
+- Also called a `radix trie` or `compact prefix tree`.
+- Represents a **space-optimized trie** in which each node that is the only child is merged with its parent. 
+
+4a) [**Crit-bit Tree**](http://cr.yp.to/critbit.html)
+- A condensed **radix trie**, generally yielding better performance due to the reduced number of pointers involved in maintaining nodes of the tree (and they’re significantly more compact than **trie** implementations requiring more pointers). 
+
 ### Usefulness
 - Binary Search Tree: maintains order and has fast search, insertion and deletion.
   - Used on databases to perform quick searches (e.g., indexing in Rails used a sorted tree to make lookup time go from linear to logarithmic)
 - The others are useful for storing data:
-  - Operating Systems use tree structure to store files.
+  - Operating Systems use a tree structure to store files.
   - HTML `DOM` uses a tree data structure to represent the hierarchy of elements.
+- **Crit-bit Tree**: used by the [Fastly CDN](https://www.fastly.com/blog/surrogate-keys-part-2) for its surrogate key functionality.``
 
 **Ruby**
 
