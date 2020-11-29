@@ -1,112 +1,108 @@
-class ResizableArray:
+class DynamicArraySet:
     """
-    Alternate array-based set implementation favoring space over speed
-    and not requiring the set elements to be hashable.
+    Alternate array-based set implementation that doesn't require the set
+    elements to be hashable.
     """
-    # ratio of element count to size of array on which it should be upsized
+    # ratio of value count to size of array on which it should be upsized
     RESIZE_FACTOR_UP = 2 / 3
-    # ratio of element to size of array on which it should be downsized
+    # ratio of value to size of array on which it should be downsized
     RESIZE_FACTOR_DOWN = 1 / 4
-    # minimal size of the array (the size is not shrunk below this size)
-    _MIN_SIZE = 10
+    _MIN_SIZE = 4
 
     def __init__(self, size=10):
-        self.n = 0  # current actual size (number of elements)
+        self.n = 0
 
-        # maximum memory size
-        if size >= ResizableArray._MIN_SIZE:
+        # minimum size in memory
+        if size >= DynamicArraySet._MIN_SIZE:
             self.size = size
         else:
-            self.size = ResizableArray._MIN_SIZE
+            self.size = DynamicArraySet._MIN_SIZE
 
         # allocate array
-        self.store = [None for _ in range(ResizableArray._MIN_SIZE)]
+        self.store = [None for _ in range(self.size)]
 
-    def contains(self, element):
+    def contains(self, value: int) -> bool:
         """
-        Check if the passed element exists in the underlying array
+        Check if the passed value exists in the underlying array
         """
         for el in self.store:
-            if el == element:
+            if el == value:
                 return True
         return False
 
-    def add(self, element):
+    def add(self, value: int) -> bool:
         """
-        Add the element in the first empty space in the underlying array
+        Add the value in the first empty space in the underlying array
         """
-        if element not in self.store:
+        if value not in self.store:
             self.n += 1
-            if self.n == self.size:
+            if self.n >= self.size:
                 self._resize(1.0)
 
             for idx, el in enumerate(self.store):
                 if el is None:
-                    self.store[idx] = element
+                    self.store[idx] = value
                     break
 
             return True
         return False
 
-    def delete(self, element):
+    def delete(self, value: int) -> bool:
         """
-        Delete the element from the underlying array
+        Delete the value from the underlying array.
         """
-        if element in self.store:
+        if value in self.store:
             self.n -= 1
             capacity_ratio = self._capacity_ratio()
-            # if 1 - capacity_ratio >= ResizableArray.RESIZE_FACTOR_UP:
-            if capacity_ratio <= ResizableArray.RESIZE_FACTOR_DOWN:
+            if capacity_ratio <= DynamicArraySet.RESIZE_FACTOR_DOWN:
                 self._resize(capacity_ratio)
 
             for idx, el in enumerate(self.store):
-                if el == element:
+                if el == value:
                     self.store[idx] = None
                     break
 
             return True
         return False
 
-    def _resize(self, capacity_ratio):
+    def _resize(self, capacity_ratio: float):
         """
         Resize the underlying array if there is too much or not enough free
         space
         """
         if (
             0 <= capacity_ratio < 1
-            and self.size / 1.5 >= ResizableArray._MIN_SIZE
+            and self.size / 1.5 >= DynamicArraySet._MIN_SIZE
         ):
-            new_element_array = [None for _ in range(int(self.size / 1.5))]
+            tmp_store = [None for _ in range(int(self.size / 1.5))]
             idx = 0
             for el in self.store:
                 if el is not None:
-                    new_element_array[idx] = el
+                    tmp_store[idx] = el
                     idx += 1
-                # else:
-                #     new_element_array.append(None)
-            self.store = new_element_array
-            self.size = len(new_element_array)
 
-        elif capacity_ratio >= ResizableArray.RESIZE_FACTOR_UP:
-            for times in range(int(self.size * 1.5)):
-                self.store.append(None)
-            # self.store.extend([None] * int(self.size / 2))
+            self.store = tmp_store
+            self.size = len(tmp_store)
+
+        elif capacity_ratio >= DynamicArraySet.RESIZE_FACTOR_UP:
+            self.store.extend([None for _ in range(int(self.size * 1.5))])
             self.size = int(self.size * 1.5)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{{{", ".join(map(str, self.store))}}}'
 
-    def __iter__(self):
+    def __iter__(self) -> iter:
         return iter(self.store)
 
-    def _capacity_ratio(self):
-        print(f'{self.n=}')
-        print(f'{self.size=}')
+    def __len__(self) -> int:
+        return len(self.store)
+
+    def _capacity_ratio(self) -> float:
         return self.n / self.size
 
 
 if __name__ == '__main__':
-    list_set = ResizableArray()
+    list_set = DynamicArraySet()
     for i in range(40):
         list_set.add(i * 4)
         print(list_set)
@@ -116,8 +112,6 @@ if __name__ == '__main__':
     print(list_set.contains(40))  # True
 
     print(list_set.contains(41))  # False
-    # for e in list_set:
-    #     print(e)
 
     for i in range(40):
         print(list_set.delete(i * 4))

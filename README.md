@@ -2,9 +2,9 @@
 
 > Abstract data types (ADTs) refer to classes of objects whose operations and properties are formally defined, but are not restricted to specific implementations.
 
-This is a repository of ADTs written in Ruby and, more recently, Python. It
- is an
- exercise in implementing abstract data structures in my own code and a guide for practical application in the future.
+This is a repository of ADTs written in Ruby and, more recently, Python
+(CPython). It is an exercise in implementing abstract data structures in my
+own code and a guide for practical application in the future.
 
 It is not intended to cover all the API variations and implementations for a particular abstract data structure.
 
@@ -20,11 +20,17 @@ Note that many of the ADTs have their own nomenclature, so the same methods may 
 - [Tree](#tree)
 
 ## Set
-> A Set is an unordered collection of elements with no duplicates.
+> A Set is an unordered collection of unique elements.
 
 ### Specifications
 - Unordered (no promises regarding insertion order)
 - Unique list of elements (no duplicates)
+- Mutability
+    - Mutable: 
+        - Python: built-in type `set` derives from `MutableSet` (subclass of
+         `Set`)
+    - Immutable (read-only): 
+        - Python: built-in type `frozenset` derives from `Set` and `Hashable`
 
 ### API
 - `insert(el)`: inserts a new element
@@ -34,8 +40,11 @@ Note that many of the ADTs have their own nomenclature, so the same methods may 
 ### Implementations
 
 1\) **Array-Based Set**
-- Use an array as storage
+- Use an array as storage for contiguously stored data
 - Don't allow it to be indexed into
+- Elements aren't required to be hashable in this case
+- Goal is a smaller data structure with few allocations
+
 - **Time Complexity**
 
 Method    | Avg. Case |Worst Case | Best Case  | Notes
@@ -89,6 +98,9 @@ Method    | Amortized   | Worst case  | Notes
   - **Although it isn’t particularly compact (requires preallocation of memory), it provides near constant time insertion and removal in the average case.**
 
 ### Usefulness
+- Sets are most commonly used for:
+    1. Membership testing
+    2. Eliminating duplicate entries (cleanup)
 - The Hash Set is useful if you want to ensure absolutely no duplicates - Hash Maps can have duplicate values (but not keys).
 - **Not ideal for runtime operations**: unfortunately, the edge cases of Hash Set (and Hash Table - up next) performance are significant, the cases are inevitable, and the methods for dealing with them require some runtime tuning.
   - They are comprised of pre-allocated buckets of fixed size, and due to speed requirements of typical non-cryptographic hash functions, collisions are inevitable. 
