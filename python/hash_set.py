@@ -48,13 +48,13 @@ class HashSet:
 
     def _resize(self):
         capacity_ratio = self._capacity_ratio()
-        # shrink array if there is less than RESIZE_FACTOR_DOWN elements
+        # shrink array if there is less than SHRINK_FACTOR elements
         if (
                 capacity_ratio < HashSet.RESIZE_FACTOR_DOWN
                 and self.size / 2 >= HashSet._MIN_SIZE
         ):
             self._create_resized_array(self.size / 2)
-        # grow array if there is more than then RESIZE_FACTOR_UP elements
+        # grow array if there is more than then GROWTH_FACTOR elements
         if capacity_ratio > HashSet.RESIZE_FACTOR_UP:
             self._create_resized_array(self.size * 2)
 

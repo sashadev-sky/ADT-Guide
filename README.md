@@ -40,10 +40,10 @@ Note that many of the ADTs have their own nomenclature, so the same methods may 
 ### Implementations
 
 1\) **Array-Based Set**
-- Use an array as storage for contiguously stored data
+- Contiguously stored data
 - Don't allow it to be indexed into
-- Elements aren't required to be hashable in this case
-- Goal is a smaller data structure with few allocations
+- Elements aren't required to be hashable
+- Goal is a smaller data structure
 
 - **Time Complexity**
 
@@ -120,13 +120,14 @@ Method    | Amortized   | Worst case  | Notes
            <li>Several other methods also exist.</li>
          </ol>
        </details>
-  - When the buckets require resizing, every element stored in the bucket must be re-hashed to find its new place. With millions of keys, this resize operation becomes prohibitively expensive. **(We basically have to double the table size of the table when we run out of space)**. 
+  - When the buckets require resizing, every element stored in the bucket
+   must be re-hashed to find its new place. With millions of keys, this resize operation becomes prohibitively expensive. **(We basically have to double the table size when we run out of space)**. 
   - **The fundamental problem with these methods is that they require some level of runtime tuning.** 
        - For ex., for the [Fastly CDN](https://www.fastly.com/blog/surrogate
        - keys-part-2), the time required to complete this operation could
         cause it to pause for a significant time period — significant enough to
          cause it to appear to “miss” purge requests for surrogate keys.
-
+  - images are really just 2-D arrays of pixels
 **Ruby**
 
 - [Set - array implementations](./ruby/array_set.rb)
