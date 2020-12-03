@@ -1,1 +1,4 @@
 .DS_STORE
+.idea/
+*.key
+.ipynb_checkpoints/

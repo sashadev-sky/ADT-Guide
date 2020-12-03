@@ -60,6 +60,7 @@ Method    | Avg. Case |Worst Case | Best Case  | Notes
   - Modifications:
     - a\) Restrict data type to only integers that live in a predefined range (the array is fixed size). Their value will correspond to an index in the array and the value at that index will correspond to its presence (either true or false)
       - e.g., the set { 0, 2, 3 } will be stored as [true, false, true, true]
+      - Keeping the size of the array fixed allows us to maintain a contiguous place in memory.
       - Improved time complexity O(1), abysmal space complexity O(range)
     - b\) Building on point a: augment to store sub-arrays (buckets) instead of T/F for the values. When we insert an integer into the set, use the modulo operator to deterministically assign every integer to a bucket: `index = integer_val % num_buckets`
       - Augmented to keep track of an arbitrary range of integers, including negative integers
@@ -95,7 +96,7 @@ Method    | Amortized   | Worst case  | Notes
   - A Hash Set is the fastest implementation of a Set: the hash uses a hashing function to store elements in memory and to later access where they are stored.
     - This creates the highest chance of uniform distribution because there is no pattern to the output, although there is still the chance of a hash collision.  
     - We want to use a Hash Set over an array-based set most of the time.
-  - **Although it isn’t particularly compact (requires preallocation of memory), it provides near constant time insertion and removal in the average case.**
+  - **Although it isn’t particularly compact (requires pre-allocation of memory), it provides near constant time insertion and removal in the average case.**
 
 ### Usefulness
 - Sets are most commonly used for:
@@ -123,11 +124,12 @@ Method    | Amortized   | Worst case  | Notes
   - When the buckets require resizing, every element stored in the bucket
    must be re-hashed to find its new place. With millions of keys, this resize operation becomes prohibitively expensive. **(We basically have to double the table size when we run out of space)**. 
   - **The fundamental problem with these methods is that they require some level of runtime tuning.** 
-       - For ex., for the [Fastly CDN](https://www.fastly.com/blog/surrogate
-       - keys-part-2), the time required to complete this operation could
-        cause it to pause for a significant time period — significant enough to
+       - For ex., for the [Fastly CDN](https://www.fastly.com/blog/surrogatekeys-part-2), the time required to complete this operation could
+         cause it to pause for a significant time period — significant enough to
          cause it to appear to “miss” purge requests for surrogate keys.
-  - images are really just 2-D arrays of pixels
+  - An example of a contiguous memory 2D array structure: an image - its
+   really just a 2-D array of pixels.
+ 
 **Ruby**
 
 - [Set - array implementations](./ruby/array_set.rb)
@@ -136,7 +138,7 @@ Method    | Amortized   | Worst case  | Notes
 
 **Python**
 
-- [Set - array implementation](./python/resizable_array_set.py)
+- [Set implementation](./python/resizable_array_set.py)
 -------------------------------------------------
 
 ## Map
