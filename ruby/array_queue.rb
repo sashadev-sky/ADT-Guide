@@ -1,4 +1,4 @@
-# naive Queue implementation using an array. (Lineaer time complexity)
+# naive Queue implementation using an array. (Linear time complexity)
 
 class NaiveArrayQueue
   def initialize

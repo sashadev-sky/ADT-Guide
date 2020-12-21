@@ -81,8 +81,7 @@ class DynamicArraySet:
     def intersection(self, s: iter) -> list:
         """
         The intersection of two sets includes members that are present in both
-        sets.
-        Accepts any iterable.
+        sets. Accepts any iterable.
         """
         return [e for _ in self for e in _ if e is not None and e in s]
 
@@ -91,8 +90,7 @@ class DynamicArraySet:
     def union(self, s: iter) -> list:
         """
         The union of two sets A and B is the set of elements which are in A,
-        in B, or in both A and B.
-        Accepts any iterable.
+        in B, or in both A and B. Accepts any iterable.
         """
         flat_l = [e for _ in self for e in _ if e is not None]
         other_list = [e for e in s if e not in flat_l]

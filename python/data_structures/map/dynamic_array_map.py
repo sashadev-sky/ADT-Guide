@@ -1,5 +1,4 @@
 class DynamicArrayMap:
-
     def __init__(self):
         self.store = []
 
