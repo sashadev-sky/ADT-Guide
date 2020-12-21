@@ -2,3 +2,5 @@
 .idea/
 *.key
 .ipynb_checkpoints/
+__pycache__/
+*.iml
