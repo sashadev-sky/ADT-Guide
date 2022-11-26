@@ -1,5 +1,3 @@
-
-
 graph = dict()
 graph['A'] = ['B', 'S']
 graph['B'] = ['A']

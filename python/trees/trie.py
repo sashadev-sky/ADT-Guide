@@ -6,9 +6,12 @@ from string import ascii_letters  # in Python 2 one would import letters
 class TrieNode:
     def __init__(self):  # each node will have
         self.is_word = False  # 52 children -
-        self.s = {c: None for c in ascii_letters}  # most will remain empty
+        self.s: dict[str, TrieNode | None] = {c: None for c in ascii_letters}  # most will remain empty
 
-def add(T, w, i=0):  # Add a word to the trie
+    def __repr__(self):
+        return f'is word: {self.is_word}, ({", ".join(char for (char, val) in self.s.items() if val)})'
+
+def add(T: TrieNode | None, w: str, i = 0) -> TrieNode:  # Add a word to the trie
     """
     :param T: trie
     :param string w: word to be added to T
@@ -24,7 +27,7 @@ def add(T, w, i=0):  # Add a word to the trie
     return T
 
 
-def Trie(S):  # Build the trie for the words in the dictionary S
+def Trie(S: set = set()):  # Build the trie for the words in the dictionary S
     """
     :param S: set of words
     :returns: trie containing all words from S
@@ -36,7 +39,7 @@ def Trie(S):  # Build the trie for the words in the dictionary S
     return T
 
 
-def spell_check(T, w):  # Spell check a word against the trie
+def spell_check(T, w: str) -> str | None:  # Spell check a word against the trie
     """Spellchecker
     :param T: trie encoding the dictionary
     :param w: given word
@@ -52,12 +55,12 @@ def spell_check(T, w):  # Spell check a word against the trie
         dist += 1  # No match - try increasing the distance
 
 
-def search(T, dist, w, i=0):
+def search(T, dist, w: str, i=0) -> str | None:
     """Searches for w[i:] in trie T with distance at most dist
     """
     if i == len(w):
         if T is not None and T.is_word and dist == 0:
-            return ""
+            return ''
         else:
             return None
     if T is None:
@@ -79,6 +82,6 @@ def search(T, dist, w, i=0):
 
 if __name__ == '__main__':
     T = TrieNode()
-    add(T, "ab")
+    r = add(T, "ab")
     # add(T, "acb")
     print(search(T, 1, "acb"))  # "ab"

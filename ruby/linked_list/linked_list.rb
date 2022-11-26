@@ -1,19 +1,4 @@
-class Node
-
-  attr_accessor :key, :val, :next_node, :prev_node
-
-  def initialize(key = nil, val = nil, next_node = nil, prev_node = nil)
-    @key = key
-    @val = val
-    @next_node = next_node
-    @prev_node = prev_node
-  end
-
-  def to_s
-    "#{@key}: #{@val}"
-  end
-
-end
+require_relative './node'
 
 class DoublyLinkedList
   include Enumerable
@@ -70,6 +55,7 @@ class DoublyLinkedList
 
     until node_scan1 == tail
       return true if node_scan1.key == key
+
       node_scan1 = node_scan1.next_node
     end
     false
@@ -124,35 +110,34 @@ class DoublyLinkedList
   private
 
   attr_reader :head, :tail
-
 end
 
 # run these tests to see how the list works
 
 if $PROGRAM_NAME == __FILE__
   list = DoublyLinkedList.new
-  list.append("link1", 3)
-  list.append("link2", 0)
-  list.append("link3", 2)
-  list.append("link4", 5)
-  list.append("link5", 5)
+  list.append('link1', 3)
+  list.append('link2', 0)
+  list.append('link3', 2)
+  list.append('link4', 5)
+  list.append('link5', 5)
   puts list[1]
   puts list[3]
-  puts list
+  puts list # [link1, 3], [link2, 0], [link3, 2], [link4, 5], [link5, 5]
   puts list.first
   puts list.last
-  p list.include?("link9")
-  p list.include?("randomtext")
-  p list.include?("link3")
-  list.remove("link5")
-  list.remove("link4")
-  list.remove("link1")
+  p list.include?('link9')
+  p list.include?('randomtext')
+  p list.include?('link3')
+  list.remove('link5')
+  list.remove('link4')
+  list.remove('link1')
   p list.empty?
-  puts list.get("link2")
-  puts list.update("link35", 12)
-  puts list.update("link2", 9)
-  puts list.get("link2")
-  list.remove("link2")
-  list.remove("link3")
+  puts list.get('link2')
+  puts list.update('link35', 12)
+  puts list.update('link2', 9)
+  puts list.get('link2')
+  list.remove('link2')
+  list.remove('link3')
   p list.empty?
 end

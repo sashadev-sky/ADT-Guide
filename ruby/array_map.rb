@@ -22,10 +22,9 @@ class ArrayMap
 
   private
 
-    attr_reader :map_array
+  attr_reader :map_array
 
-    def deep_dup(arr)
-     arr.map { |el| el.is_a?(Array) ? deep_dup(el) : el }
-    end
-
- end
+  def deep_dup(arr)
+    arr.map { |el| el.is_a?(Array) ? deep_dup(el) : el }
+  end
+end

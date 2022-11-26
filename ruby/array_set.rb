@@ -8,12 +8,14 @@ class MaxIntSet
   def insert(num)
     validate!(num)
     return false if @store[num]
+
     @store[num] = true
   end
 
   def remove(num)
     validate!(num)
     return nil unless include?(num)
+
     @store[num] = false
     num
   end
@@ -25,12 +27,12 @@ class MaxIntSet
 
   private
 
-  def is_valid?(num)
+  def valid?(num)
     num.between?(0, @store.length - 1)
   end
 
   def validate!(num)
-    raise "Out of bounds" unless is_valid?(num)
+    raise 'Out of bounds' unless valid?(num)
   end
 end
 
@@ -40,11 +42,12 @@ end
 
 class IntSet
   def initialize(num_buckets = 20)
-    @store = Array.new(num_buckets) { Array.new }
+    @store = Array.new(num_buckets) { [] }
   end
 
   def insert(num)
     return false if include?(num)
+
     self[num] << num
     num
   end
@@ -76,12 +79,13 @@ class ResizingIntSet
   attr_reader :count
 
   def initialize(num_buckets = 20)
-    @store = Array.new(num_buckets) { Array.new }
+    @store = Array.new(num_buckets) { [] }
     @count = 0
   end
 
   def insert(num)
     return false if include?(num)
+
     self[num] << num
     @count += 1
     resize! if num_buckets < @count
@@ -106,7 +110,7 @@ class ResizingIntSet
   def resize!
     old_store = @store
     @count = 0
-    @store = Array.new(num_buckets * 2) { Array.new }
+    @store = Array.new(num_buckets * 2) { [] }
 
     old_store.flatten.each { |num| insert(num) }
   end

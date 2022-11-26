@@ -1,4 +1,4 @@
-from typing import Hashable
+from typing import Hashable, Iterable, Iterator, Self
 
 
 class DynamicArraySet:
@@ -17,7 +17,7 @@ class DynamicArraySet:
 
     __contains__ = contains
 
-    def __iter__(self) -> iter:
+    def __iter__(self) -> Iterator[list]:
         return iter(self.store)
 
     def __len__(self) -> int:
@@ -71,14 +71,14 @@ class DynamicArraySet:
         for el in flat_list:
             self.add(el)
 
-    def difference(self, s: iter) -> list:
+    def difference(self, s: Iterable) -> list:
         """
         The set of all elements of A that are not elements of B
         Different result if swap A and B
         """
         return [e for _ in self for e in _ if e is not None and e not in s]
 
-    def intersection(self, s: iter) -> list:
+    def intersection(self, s: Iterable) -> list:
         """
         The intersection of two sets includes members that are present in both
         sets. Accepts any iterable.
@@ -87,7 +87,7 @@ class DynamicArraySet:
 
     __and__ = intersection
 
-    def union(self, s: iter) -> list:
+    def union(self, s: Iterable) -> list:
         """
         The union of two sets A and B is the set of elements which are in A,
         in B, or in both A and B. Accepts any iterable.
@@ -195,6 +195,6 @@ if __name__ == '__main__':
         print(s1)
 
     hs1 = DynamicHashSet()
-    for i in "hellohey":
+    for i in 'hellohey':
         hs1.add(i)
         print(hs1)

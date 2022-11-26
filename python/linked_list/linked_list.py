@@ -1,18 +1,20 @@
-from python.data_structures.node import SinglyNode, DoublyNode
 
+from typing import Any, Iterator
+
+from python.linked_list.node import SinglyNode, DoublyNode
 
 class SinglyLinkedList:
     def __init__(self):
-        self.head = None
+        self.head: SinglyNode | None = None
         self.size = 0
 
-    def __contains__(self, value) -> bool:
+    def __contains__(self, value: Any):
         for node in self:
             if node == value:
                 return True
         return False
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[Any]:
         curr = self.head
         while curr:
             val = curr.val
@@ -26,13 +28,14 @@ class SinglyLinkedList:
     def __str__(self):
         return f'[{"->".join([str(node) for node in self])}]'
 
-    def append(self, key, value):
+    def append(self, key: str, value: Any):
         """add value to the end of the list"""
         el = SinglyNode(key, value)
         if self.empty():
             self.head = el
         else:
             curr = self.last()
+            assert curr is not None
             curr.next = el
         self.size += 1
 
@@ -41,12 +44,13 @@ class SinglyLinkedList:
         self.head = None
         self.size = 0
 
-    def remove(self, key):
+    def remove(self, key: str) -> Any:
         prev, curr = None, self.head
 
         while curr:
             if curr.key == key:
                 next_node = curr.next
+                assert prev is not None
                 prev.next = next_node
                 self.size -= 1
                 return curr.val
@@ -55,18 +59,18 @@ class SinglyLinkedList:
             curr = curr.next
         return None
 
-    def remove_val_by_index(self, x):
+    def remove_val_by_index(self, x: int) -> Any:
         """remove and return value at index x provided as parameter"""
         curr = self.head
         i = 0
-        while curr:
+        while curr and curr.key:
             if i == x:
                 return self.remove(curr.key)
             curr = curr.next
             i += 1
         return -1
 
-    def reverse_list_iter(self, head):
+    def reverse_list_iter(self, head: SinglyNode | None) -> SinglyNode | None:
         """
         # Time complexity : O(n). Assume that n is the list's length,
         # the time complexity is O(n).
@@ -90,7 +94,7 @@ class SinglyLinkedList:
         self.head = prev
         return prev
 
-    def reverse_list_recur(self, head):
+    def reverse_list_recur(self, head: SinglyNode | None) -> SinglyNode | None:
         """
         reverse the sequence of node pointers in the linked list
 
@@ -109,7 +113,7 @@ class SinglyLinkedList:
         you test your code with a linked list of size 2.
         """
 
-        if not head or not head.next:
+        if head is None or head.next is None:
             return head
 
         new_head = self.reverse_list_iter(head.next)
@@ -117,7 +121,7 @@ class SinglyLinkedList:
         head.next = None
         return new_head
 
-    def search_val(self, value) -> int:
+    def search_val(self, value: Any) -> int:
         """Return indices where value was found"""
         i = 0
         for node in self:
@@ -129,16 +133,16 @@ class SinglyLinkedList:
     def empty(self) -> bool:
         return self.size == 0
 
-    def first(self):
+    def first(self) -> SinglyNode | None:
         return self.head
 
-    def last(self):
+    def last(self) -> SinglyNode | None:
         curr = self.head
         while curr and curr.next:
             curr = curr.next
         return curr
 
-    def prepend(self, key, value) -> None:
+    def prepend(self, key: str, value: Any):
         """Add value to the left of the list making it the head"""
         el = SinglyNode(key, value, self.head)
         self.head = el
@@ -146,11 +150,13 @@ class SinglyLinkedList:
 
 
 class DoublyLinkedList(SinglyLinkedList):
+    head: DoublyNode | None
+
     def __init__(self):
         super().__init__()
-        self.tail = None
+        self.tail: DoublyNode | None = None
 
-    def append(self, key, value):
+    def append(self, key: str, value: Any):
         if self.empty():
             el = DoublyNode(key, value)
             self.head = self.tail = el
@@ -163,42 +169,45 @@ class DoublyLinkedList(SinglyLinkedList):
         super().clear()
         self.tail = None
 
-    def prepend(self, key, value):
+    def prepend(self, key: str, value: Any):
         el = DoublyNode(key, value, self.head)
         self.head.prev = self.head = el
         self.size += 1
 
-    def remove(self, key):
+    def remove(self, key: str) -> Any:
         curr = self.head
 
-        while curr:
+        while curr and curr.key:
             if curr.key == key:
                 prev = curr.prev
                 next_node = curr.next
-                prev.next = next_node
-                next_node.prev = prev
+                if prev is not None:
+                    prev.next = next_node
+                if next_node is not None:
+                    next_node.prev = prev
                 self.size -= 1
                 return curr.val
 
             curr = curr.next
         return None
 
-    def reverse_list_iter(self, head):
+    def reverse_list_iter(self, head: DoublyNode | None) -> DoublyNode | None:
         prev, curr = None, head
 
         while curr:
-            if prev is not None:
+            if prev:
                 prev.prev = curr
             curr.next, prev, curr = prev, curr, curr.next
 
-        prev.prev = None
         self.tail = head
+        if prev is not None:
+            prev.prev = None
         self.head = prev
 
         return prev
 
-    def reverse_list_recur(self, head):
-        if not head or not head.next:
+    def reverse_list_recur(self, head: DoublyNode | None) -> DoublyNode | None:
+        if head is None or head.next is None:
             return head
 
         tail = head.next
@@ -212,12 +221,13 @@ class DoublyLinkedList(SinglyLinkedList):
 
 class CircularlyLinkedList(DoublyLinkedList):
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[Any]:
         curr = self.head
         counter = 0
 
         while curr:
             val = curr.val
+            assert self.tail is not None
             if counter > 0 and curr == self.tail.next:
                 yield val
                 break
@@ -225,7 +235,7 @@ class CircularlyLinkedList(DoublyLinkedList):
             counter += 1
             yield val
 
-    def append(self, key, value):
+    def append(self, key: str, value: Any):
         if self.empty():
             el = DoublyNode(key, value)
             self.head = self.tail = el
@@ -233,14 +243,16 @@ class CircularlyLinkedList(DoublyLinkedList):
             el = DoublyNode(key, value, None, self.tail)
             self.tail.next = self.tail = el
             el.next = self.head
+            assert self.head is not None
             self.head.prev = el
         self.size += 1
 
-    def remove(self, key):
+    def remove(self, key: str) -> Any:
         curr, prev = self.head, self.tail
 
         while curr:
             if curr.key == key:
+                assert isinstance(curr.next, DoublyNode) and isinstance(self.head, DoublyNode) and isinstance(prev, DoublyNode)
                 if curr == self.tail:
                     self.tail = curr.next
                     self.head.next = self.tail

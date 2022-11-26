@@ -17,6 +17,5 @@ class ArrayStack
 
   private
 
-    attr_reader :stack_arr
-
+  attr_reader :stack_arr
 end

@@ -1,5 +1,10 @@
-from tree_node import TreeNode
+from enum import StrEnum
+from typing import TypeVar
 
+from tree_node import BSTNode, TreeNode
+
+NodeTypes = TreeNode | BSTNode
+T = TypeVar('T', bound=NodeTypes)
 
 class IterativeDFS:
     """Iterative Depth-First Traversals w/ Stack"""
@@ -31,8 +36,10 @@ class IterativeDFS:
         return res
 
     @staticmethod
-    # Post Order :children before node( L ,R , N)
     def postorder(root, res):
+        """
+        Post Order :children before node(L, R, N)
+        """
         stack = [root]
         while stack:
             root = stack.pop()
@@ -217,9 +224,9 @@ class DFS:
         return ret
 
 
-class BFS:
+class BFS():
     @staticmethod
-    def bfs(root):
+    def bfs(root: T) -> list[T | None]:
         list_of_nodes, traversal_queue = [], [root]
         while traversal_queue:
             node = traversal_queue.pop(0)
@@ -230,14 +237,14 @@ class BFS:
                 traversal_queue.append(node.right)
         return list_of_nodes
 
+TraversalCategory = StrEnum('TraversalCategory', ['BFS', 'DFS'])
 
 class TreeTraversal:
     @staticmethod
-    def traversal(root, category='dfs', alg='preorder', stack='implicit'):
-        if category == 'dfs':
+    def traversal(root: NodeTypes, category=TraversalCategory, alg='preorder', stack='implicit') -> list[NodeTypes | None]:
+        if category == TraversalCategory.DFS:
             res = []
             DFS(root, res, alg, stack)
             return res
-        elif category == 'bfs':
-            bfs = BFS()
-            return bfs.bfs(root)
+        bfs = BFS()
+        return bfs.bfs(root)

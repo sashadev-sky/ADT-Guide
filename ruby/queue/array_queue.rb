@@ -14,19 +14,22 @@ class NaiveArrayQueue
     queue_arr.shift
   end
 
-  def peek
+  def first
     queue_arr.first
+  end
+
+  def is_empty
+    queue_arr.empty?
   end
 
   private
 
-    attr_reader :queue_arr
-
+  attr_reader :queue_arr
 end
 
 # clever Queue implementation using an array. Constant time complexity (amortized)
 
-class BetterArrayQueue
+class StackQueue
   def initialize
     @queue_arr1 = []
     @queue_arr2 = []
@@ -38,26 +41,27 @@ class BetterArrayQueue
   end
 
   def dequeue
-    if queue_arr2.length == 0
-      until queue_arr1.length == 0
-        queue_arr2.push(queue_arr1.pop)
-      end
+    if queue_arr2.empty?
+      queue_arr2.push(queue_arr1.pop) until queue_arr1.empty?
     end
     queue_arr2.pop
   end
 
-  def peek
-    if !queue_arr2.empty?
+  def first
+    if queue_arr2.length
       queue_arr2.last
-    elsif !queue_arr1.empty?
+    elsif queue_arr1.length
       queue_arr1.first
     else
       []
     end
   end
 
+  def is_empty
+    queue_arr1.empty? && queue_arr2.empty?
+  end
+
   private
 
-    attr_reader :queue_arr1, :queue_arr2
-
+  attr_reader :queue_arr1, :queue_arr2
 end

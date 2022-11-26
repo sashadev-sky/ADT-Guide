@@ -15,14 +15,31 @@ Note that many of the ADTs have their own nomenclature, so the same methods may 
 - [Set](#set)
 - [Map](#map)
 - [Linked List](#linked-list)
+  - [Singly-Linked List](#1-singly-linked-list)
+  - [Doubly-Linked List](#2-doubly-linked-list)
+  - [Circularly-Linked List](#3-circularly-linked-list)
 - [Stack](#stack)
+  - [Monotonic Stack](#monotonic-stack)
 - [Queue](#queue)
+  - [Deque](#deque)
+  - [Priority Queue](#priority-queue)
+  - [Circular Queue](#circular-queue)
 - [Tree](#tree)
+  - [Binary Tree](#binary-tree)
+    - [Binary Search Tree](#1-binary-search-tree)
+      - [AVL tree](#1a-avl-tree)
+      - [Red Black Tree](#1b-red-black-tree)
+    - [Trie](#2-trie)
+    - [Radix Tree](#3-radix-tree)
+      - [Crit-bit Tree](#3a-crit-bit-tree)
+  - [Ternary Tree](#ternary-tree)
+  - [Unary Tree](#unary-tree)
+[N-ary Tree (Poly Tree)](#n-ary-tree-poly-tree)
 - [Graph](#graph)
 
 ## Set
 
-> A Set is an unordered collection of unique elements.
+> A **Set** is an unordered collection of unique elements.
 
 ### Specifications
 
@@ -53,27 +70,27 @@ Note that many of the ADTs have their own nomenclature, so the same methods may 
 
 Method    | Avg. Case |Worst Case | Best Case  | Notes
  ---      | --- |    ---        | ---        | ---
- `include?` |  O(n) | O(n)       |  O(1)      | Worst: searching for the last element. Best: searching for the first element |
- `insert`  |  O(n)  | O(n)       |  O(1)      | Check for inclusion before inserting. Because sets have no notion of order, you never select a specific index to insert. Best case is empty set |
- `delete`  |  O(n)   | O(n)       |   O(1)    | Need to scan through elements to find the one to delete |
+ `include?` |  `O(n)` | `O(n)`       |  `O(1)`      | Worst: searching for the last element. Best: searching for the first element |
+ `insert`  |  `O(n)`  | `O(n)`       |  `O(1)`      | Check for inclusion before inserting. Because sets have no notion of order, you never select a specific index to insert. Best case is empty set |
+ `delete`  |  `O(n)`   | `O(n)`       |   `O(1)`    | Need to scan through elements to find the one to delete |
 
-- **Space Complexity**: O(n)
+- **Space Complexity**: `O(n)`
 
 - **Analysis**
   - Could do better. The array's fastest operation is indexing and that is not used.
   - Modifications:
     - a\) Restrict data type to only integers that live in a predefined range (the array is fixed size). Their value will correspond to an index in the array and the value at that index will correspond to its presence (either true or false)
-      - e.g., the set { 0, 2, 3 } will be stored as [true, false, true, true]
+      - e.g., the set { 0, 2, 3 } will be stored as `[true, false, true, true]`
       - Keeping the size of the array fixed allows us to maintain a contiguous place in memory.
-      - Improved time complexity O(1), abysmal space complexity O(range)
+      - Improved time complexity `O(1)`, abysmal space complexity `O(range)`
     - b\) Building on point a: augment to store sub-arrays (buckets) instead of T/F for the values. When we insert an integer into the set, use the modulo operator to deterministically assign every integer to a bucket: `index = integer_val % num_buckets`
       - Augmented to keep track of an arbitrary range of integers, including negative integers
       - Array is still fixed size
-      - Fine for smaller sample sizes, but as our sample size increases will rely more and more on an array scan - O(n) time complexity - which were trying to avoid
-      - Improved space complexity O(n)
+      - Fine for smaller sample sizes, but as our sample size increases will rely more and more on an array scan - `O(n)` time complexity - which were trying to avoid
+      - Improved space complexity `O(n)`
     - c\) Building on point b: resize the array by a constant multiple that scales with the number of buckets. The goal is to have `buckets.length > N` at all times
       - The array is no longer a fixed size.
-      - Improved time complexity O(1) amortized, space complexity stays at O(n)
+      - Improved time complexity `O(1)` amortized, space complexity stays at `O(n)`
 
 2\) **Hash Set**
 
@@ -89,14 +106,14 @@ Method    | Avg. Case |Worst Case | Best Case  | Notes
 
 Method    | Amortized   | Worst case  | Notes
 ---       | ---         |  ---        | ---
-`include?`| O(1)        |   O(n)      | Worst case is in rare case of a hash collision
-`insert`  | O(1)        |   O(n)      | Worst case is in rare case of a hash collision
-`delete`  | O(1)        |   O(n)      | Worst case is in rare case of a hash collision
+`include?`| `O(1)`        |   `O(n)`      | Worst case is in rare case of a hash collision
+`insert`  | `O(1)`        |   `O(n)`      | Worst case is in rare case of a hash collision
+`delete`  | `O(1)`        |   `O(n)`      | Worst case is in rare case of a hash collision
 
 - Ruby handles a `hash collision` with `separate chaining`.
 - Python handles a `hash collision` with open addressing.
 
-- The maximum `density` (# of items chained at a location in memory) Ruby allows before `rehashing` is 5, which is O(n) time complexity.
+- The maximum `density` (# of items chained at a location in memory) Ruby allows before `rehashing` is 5, which is `O(n)` time complexity.
 
 - **Space Complexity**: `O(n)`
 
@@ -133,18 +150,20 @@ Method    | Amortized   | Worst case  | Notes
   - When the buckets require resizing, every element stored in the bucket
    must be re-hashed to find its new place. With millions of keys, this resize operation becomes prohibitively expensive. **(We basically have to double the table size when we run out of space)**.
   - **The fundamental problem with these methods is that they require some level of runtime tuning.**
-    - For ex., for the [Fastly CDN](https://www.fastly.com/blog/surrogatekeys-part-2), the time required to complete this operation could cause it to pause for a significant time period — significant enough to cause it to appear to “miss” purge requests for surrogate keys.
+    - For ex., for the [Fastly CDN](https://www.fastly.com/blog/surrogate-keys-part-2), the time required to complete this operation could cause it to pause for a significant time period — significant enough to cause it to appear to “miss” purge requests for surrogate keys.
   - An example of a contiguous memory 2D array structure: an image - its really just a 2-D array of pixels.
 
-**Ruby**
+### Code References
 
-- [Set - array implementations](./ruby/array_set.rb)
-
-- [Set - hash implementation](./ruby/hash_set.rb)
-
-**Python**
-
-- [Set implementation](./python/data_structures/dynamic_array_set.py)
+> **Ruby**
+>
+> - [Set - array implementations](ruby/array_set.rb)
+> - [Set - hash implementation](ruby/hash_set.rb)
+>
+>**Python**
+>
+> - [Set implementation](python/set/dynamic_array_set.py)
+>
 
 -------------------------------------------------
 
@@ -186,11 +205,11 @@ Method    | Amortized   | Worst case  | Notes
 
 Method    | Amortized   | Worst Case  | Notes
 ---       | ---         |  ---        | ---
-`get`     | O(1)        |   O(n)      | Worst case is in rare case of a hash collision
-`set`     | O(1)        |   O(n)      | Worst case is in rare case of a hash collision
-`delete`  | O(1)        |   O(n)      | Worst case is in rare case of a hash collision
+`get`     | `O(1)`        |   `O(n)`      | Worst case is in rare case of a hash collision
+`set`     | `O(1)`        |   `O(n)`      | Worst case is in rare case of a hash collision
+`delete`  | `O(1)`        |   `O(n)`      | Worst case is in rare case of a hash collision
 
-- **Space Complexity**: O(n)
+- **Space Complexity**: `O(n)`
 
 - Note: the time and space complexities are the same as for the Hash Set.
 
@@ -202,11 +221,11 @@ Method    | Amortized   | Worst Case  | Notes
 
 Method    | Avg. Case | Worst Case | Best Case   | Notes
 ---       | --- | ---         |  ---        | ---
-`get`     |   O(n) | O(n)      |  O(1)       |
-`set`     |   O(n) | O(n)      |  O(1)       |
-`delete`  |  O(n) |  O(n)      |  O(1)       |
+`get`     |   `O(n)` | `O(n)`      |  `O(1)`       |
+`set`     |   `O(n)` | `O(n)`      |  `O(1)`       |
+`delete`  |  `O(n)` |  `O(n)`      |  `O(1)`       |
 
-- **Space Complexity**: O(n)
+- **Space Complexity**: `O(n)`
 
 - Note: the time and space complexities are the same as for the array-based set.
 
@@ -216,15 +235,17 @@ Method    | Avg. Case | Worst Case | Best Case   | Notes
 - Dictionaries provide constant time (amortized) performance for assignments and accesses, which means they are ideal
    for bookkeeping dynamic information.
 
-**Ruby**
+### Code References
 
-- [Map - hash map implementation](./ruby/hash_map.rb)
-
-- [Map - 2D array-based implementation](./ruby/array_map.rb)
-
-**Python**
-
-- [Map - 2D array-based implementation](./python/data_structures/map/dynamic_array_map.py)
+> **Ruby**
+>
+> - [Map - hash map implementation](ruby/hash_map.rb)
+> - [Map - 2D array-based implementation](ruby/array_map.rb)
+>
+>**Python**
+>
+> - [Map - 2D array-based implementation](python/map/dynamic_array_map.py)
+>
 
 -------------------------------------------------
 
@@ -305,6 +326,11 @@ Method | Avg. Case | Worst Case | Best Case | Notes
 - **Space Complexity**: `O(n)`
   - Space complexity for a Doubly-Linked List is more than a Singly-Linked List because were storing an extra link to a node, but it doesn't change it asymptotically (still linear).
 
+#### 3) **Circularly-Linked List**
+
+- **Circular**
+  - **Cycle**: when a node points back to a previous node. Begins at the last node of the linked list
+
 ### Usage
 
 - The advantage of the Linked List is that the values are stable: they don't correspond to indices, so you never need to re-index.
@@ -312,18 +338,15 @@ Method | Avg. Case | Worst Case | Best Case | Notes
   - Also, unlike lists, Linked Lists don't preallocate memory
 - Useful in general if you are deleting many items: it will be faster than with an array, but doesn't make a difference in the time complexity asymptotically.
 
-#### 3) **Circularly-Linked List**
+### Code References
 
-- **Circular**
-  - **Cycle**: when a node points back to a previous node. Begins at the last node of the linked list
-
-**Ruby**
-
-- [Doubly-Linked List - Node class implementation](./ruby/linked_list.rb)
-
-**Python**
-
-- [Singly, Doubly, and Circular - Node implementation](./python/data_structures/linked_list.py)
+> **Ruby**
+>
+> - [Doubly-Linked List - Node class implementation](ruby/linked_list/linked_list.rb)
+>
+>**Python**
+>
+> - [Singly, Doubly, and Circular - Node implementation](python/linked_list/linked_list.py)
 
 -------------------------------------------------
 
@@ -378,21 +401,26 @@ Method  |  Worst Case | Notes
 - Syntax checking; matching opening and closing parentheses (e.g., in regex, math equations, etc.) to be specific.
 - Ideal as a temporary container for temporary data
 
--------------------------------------------------
-
-### Monotonic Stack
-
-> A monotonic stack is a stack whose elements are monotonically increasing or decreasing. It contains all qualities that a typical stack has.
+### Sub-Types
 
 -------------------------------------------------
 
-**Ruby**
+#### Monotonic Stack
 
-- [Stack - array implementation](./ruby/array_stack.rb)
+> A **monotonic stack** is a stack whose elements are monotonically increasing or decreasing. It contains all qualities that a typical stack has.
 
-**Python**
+-------------------------------------------------
 
-- [Stack - array and linked list implementation](./python/data_structures/stack.py)
+### Code References
+
+> **Ruby**
+>
+> - [Stack - array implementation](ruby/array_stack.rb)
+>
+>**Python**
+>
+> - [Stack - array and linked list implementation](python/stack/stack.py)
+>
 
 -------------------------------------------------
 
@@ -419,7 +447,8 @@ Method  |  Worst Case | Notes
 
 - `enqueue(el)`: adds an element to the back of the Queue
 - `dequeue`: removes the element at the front of the Queue and returns it
-- `peek`: returns the element at the front of the Queue
+- `first`: returns the element at the front of the Queue
+- `empty`: return true if the Queue does not contain any elements.
 
 ### Implementations
 
@@ -434,22 +463,25 @@ Method | Worst Case | Best case | Notes
 ---    | ---        | ---       |  ---
 `enqueue` | `O(1)`    |   `O(1)`    |  `Array#push` has `O(1)` runtime
 `dequeue`|  `O(n)`    |   `O(n)`    | `Array#shift` has `O(n)` runtime
+`first`|  `O(1)`    |   `O(1)`    |
+`empty`|  `O(1)`    |   `O(1)`    |
 
 - **Analysis**
   - Could do better: is there a way to implement a Queue using an array in constant time?
     - Yes, implement it using 2 stacks. (Amortized constant time)
-    - See `NaiveArrayQueue` vs `BetterArrayQueue` linked at the end of this section.
+    - See `NaiveArrayQueue` vs `BetterArrayQueue` in the code files linked at the end of this section.
   - Could still do better with Doubly-Linked List.
 
 2\) **Doubly Linked List**
 
 - A Queue can be implemented as a Doubly-Linked List by just enforcing constraints on it that only allow you to add to the back, delete from the front and peek at the first element in the front of the Queue.
-- This is called a **Dequeue (double-ended queue)**
 
 Method | Worst Case | Best case | Notes
 ---    | ---        | ---       |  ---
 `enqueue` | `O(1)`    |   `O(1)`    |
 `dequeue`|  `O(1)`    |   `O(1)`    |
+`first`|  `O(1)`    |   `O(1)`    |
+`empty`|  `O(1)`    |   `O(1)`    |
 
 - **Analysis**
   - Doubly-Linked List is the superior implementation - pure constant runtime.
@@ -461,24 +493,54 @@ Method | Worst Case | Best case | Notes
 - Internally, a list is represented as an array; the largest costs come from growing beyond the current allocation size (because everything must move), or from inserting or deleting somewhere near the beginning (because everything after that must move). **If you need to add/remove at both ends, consider using a `collections.deque` instead.**
   - A deque (double-ended queue) is represented internally as a doubly linked list. (Well, a list of arrays rather than objects, for greater efficiency.) Both ends are accessible, but even looking at the middle is slow, and adding to or removing from the middle is slower still.
 
-### Dequeue
+### Code References
+
+> **Ruby**
+>
+> - [Queue - Naive array, stack array](ruby/queue/array_queue.rb)
+>
+>**Python**
+>
+> - [Queue - Naive array, stack array](python/queue/array_queue.py)
+> - [Queue - Doubly Linked List](python/queue/doubly_linked_list_queue.py)
+
+### Deque
 
 -------------------------------------------------
 
-> **Deques** (not to be confused with the "dequeue" operation in queues) is a data structure that is closely related to queues. Deque simply stands for "double-ended queue," and as the name implies, it allows us to add and remove items at both sides of a queue.
+> A **Deque** (not to be confused with the "dequeue" operation in queues), or **double-ended queue**, is a data structure that is closely related to queues. Deques allow us to add and remove items at both sides of a queue.
+>
+> It is usually pronounced “deck” to avoid confusion with the dequeue method of the regular queue ADT, which is pronounced like the abbreviation “D.Q.”
 
-![](./deque.png)
+![Deque](./images/deque.png)
 
-**API:**
+#### API
 
-- `add_front`
-- `remove_front`
-- `add_end`
-- `remove_end`
-- `show_front`
-- `show_end`
+Method | Worst Case | Best case | Notes
+---    | ---        | ---       |  ---
+`add_first` | `O(1)`    |   `O(1)`    |
+`add_last`|  `O(1)`    |   `O(1)`    |
+`delete_first`| `O(1)`    |   `O(1)`    |
+`delete_last`| `O(1)`    |   `O(1)`    |
+`first`|  `O(1)`    |   `O(1)`    |
+`last`|  `O(1)`    |   `O(1)`    |
+`empty`|  `O(1)`    |   `O(1)`    |
 
-> Again, because of the nature of Python lists, the `remove_front` and `add_front` become `O(n)` operations.
+### Implementation
+
+1\) **Doubly Linked List**
+
+- Builds on the **Doubly Linked List** Queue implementation to add additional methods.
+
+#### Usage
+
+The deque abstract data type is more general than both the stack and the queue ADTs. The extra generality can be useful in some applications. For example, a restaurant using a queue to maintain a waitlist. Occassionally, the first person might be removed from the queue only to find that a table was not available. Typically, the restaurant will re-insert the person at the first position in the queue.
+
+### Code References
+
+>**Python**
+>
+> - [Queue - Deque](python/queue/deque.py)
 
 -------------------------------------------------
 
@@ -490,20 +552,32 @@ Method | Worst Case | Best case | Notes
 > and will be later removed from the queue with the highest priority element first. That is, the items are (conceptually) stored in the queue
 > in priority order instead of in insertion order.
 
-**Specifications**
+#### Specifications
 
 - Must support at least two operations:
   - Insertion: An element is added to the queue with a priority (a numeric value).
   - Top item removal: Deletes the element or one of the elements with the current top priority and return it.
 
+-------------------------------------------------
 
-**Ruby**
+### Circular Queue
 
-- [Queue - array implementation](./ruby/array_queue.rb)
+-------------------------------------------------
 
-**Python**
+> A **circular queue**, also called a **ring buffer**, is linear data structure in which the operations are performed based on FIFO principle, and the last position is connected back to the first position to make a circle.
 
-- [Queue - Naive array, stack array, and doubly linked list](./python/data_structures/queue_dequeue.py)
+#### Implementations
+
+##### 1\) Array
+
+- In a circular queue, we use a **fixed array** and two pointers, `head` and `tail`. `head` indicates the start position of the queue while `tail` indicates the ending position of the queue.
+- The first value in the array isn’t always at index 0.
+- Standard array-based queue structure modified with a **modulo index system** in order to reuse the cleared space at the beginning of the queue without the need to reallocate space with `push` and `shift` operations.
+
+Method | Worst Case | Best case | Notes
+---    | ---        | ---       |  ---
+`enqueue` | `O(1)`    |   `O(1)`    | If the array is fixed.
+`dequeue`|  `O(1)`    |   `O(1)`    | If the array is fixed. By keeping a variable to track the head index, can be performed in `O(1)` time.
 
 -------------------------------------------------
 
@@ -567,7 +641,7 @@ Method | Worst Case | Best case | Notes
 >
 > - The degree of a binary tree is 2
 
-![Tree Levels](./python/data_structures/trees/tree_d_h_levels.png)
+![Tree Levels](./images/tree_d_h_levels.png)
 
 ### Specifications
 
@@ -595,33 +669,32 @@ The implementation above is generalized to apply to all types of the tree data s
 
 -------------------------------------------------
 
-### Binary Tree
+#### Binary Tree
 
 -------------------------------------------------
 
-> A tree data structure in which each node has at most two children, which are referred to as the left child and the right child.
+> A **binary tree** is a tree data structure in which each node has at most two children, which are referred to as the left child and the right child.
 >
 - One of the most typical tree structure
 - Any node can have either zero, one, or two children.
 - No notion of order
 
-#### Complexity
+##### Complexity
 
--------------------------------------------------
+- Note: time complexities assume you are calling these methods on the root node
 
-**Time:** Assuming you are calling these methods on the root node,
-
-Method | Avg. Case| Worst Case | Best Case | Notes
+| | Avg. Case| Worst Case | Best Case | Notes
 ---    | ---      | ---        | ---       | ---
-`add_child` | `O(1)` |    `O(1)`     |   `O(1)`
-`remove_child` | `O(n)` | `O(n)`   | `O(n)`
-`count` |  `O(n)`    |     `O(n)`   |    `O(1)`  |
+`add_child` | **`O(1)`** |    `O(1)`     |   `O(1)`
+`remove_child` | **`O(n)`** | `O(n)`   | `O(n)`
+`count` |  **`O(n)`**    |     `O(n)`   |    `O(1)`  |
 
-**Space**: `O(n)`
-
-#### Attributes
+| SPACE   | `O(n)`    |
+|---------|-----------|
 
 -------------------------------------------------
+
+##### Attributes
 
 > **Balanced** (or **height-balanced**): The left and right subtrees of every node differ in height by no more than 1. Otherwise, the binary tree is **unbalanced**.
 >
@@ -634,7 +707,7 @@ Method | Avg. Case| Worst Case | Best Case | Notes
 >
 > **Perfect**: All interior nodes have two children and all leaves have the same depth.
 >
-> **Left** or **Right** **Skewed** (or **Pathological**): Each node has 1 child node only.
+> **Left** or **Right** **Skewed** (or **Pathological**, **degenerate**): Each node has 1 child node only.
 
 - **Summary**:
   - Complete trees: *must* be balanced; *can* be full
@@ -712,23 +785,19 @@ Method | Avg. Case| Worst Case | Best Case | Notes
 
 -------------------------------------------------
 
-1a\) **Binary Search Trees**
+##### 1) Binary Search Tree
 
-> - **search tree**: an ordered tree data structure used to store a **dynamic set** or **associative array** where the keys are usually strings.
+> A **binary search tree (BST)** is an **ordered** or **sorted binary tree**.
+>
 
-- Used for searching
-  - The structure of the BST makes looking for the node with the maximum and minimum values very easy.
+###### Terminology
+
+- **Search tree**: an **ordered** tree data structure used to store a **dynamic set** or **associative array** where the keys are usually strings
+
+###### Specifications
+
 - An extension of the Binary Tree with the addition of a restriction:
   - The child nodes are stored in a specific order: the left subtree of a node only contains values less than itself and the right subtree only contains values greater than it.
-- There are essentially two operations that are needful for having a usable BST. These are the `insert` and `remove` operations.
-
-```puml
-graph searchtree {
-  size=6;
-  2 -- 1;
-  2 -- 3;
-}
-```
 
 ```puml
 graph searchtree {
@@ -744,38 +813,81 @@ graph searchtree {
 }
 ```
 
-- **Time Complexity**
+###### Implementation
 
-Method | Avg. Case| Worst Case | Best Case | Notes
+- Key operations, namely `#find`, `#insert`, and `#delete`, should run fast on this data structure.
+
+###### Complexity
+
+- Note: time complexities assume you are calling these methods on the root node.
+
+| | Time Avg.| Time Worst | Time Best | Notes
 ---    | ---      | ---        | ---       | ---
-`add_child` | log(n) | O(n)     |  O(1)    | Refer to this method by the Avg. Case: you can only add from the root so it has to find the correct node to add to either from the left or right. log(n) where n is the height of the tree. Worst Case: the tree is one-sided (most extreme case of **unbalanced** - at this point it's pretty much just a linked list) so you can't take advantage of the logarithmic property of this tree type.
-`remove_child` | log(n) | O(n)  |  O(1)    |
-`count` |     O(n)       |  O(n) |  O(1)   |
+INSERTION | **`O(logn)`** | `O(n)`     |  `O(1)`    | Refer to this method by the Avg. Case: you can only add from the root so it has to find the correct node to add to either from the left or right. `O(logn)` where `n` is the height of the tree. Worst Case: the tree is one-sided (most extreme case of **unbalanced** - at this point it's pretty much just a linked list) so you can't take advantage of the logarithmic property of this tree type.
+DELETION | **`O(logn)`** | `O(n)`  |  `O(1)`    |
+SEARCH | **`O(logn)`** | `O(n)` | `O(1)` |
+TRAVERSAL | **`O(n)`** | `O(n)` | `O(n)` | It's often the case that we want to get out all the values held in a binary search tree. And, it's often the case that we want these results to be sorted -- after all, that's one of the main benefits of creating a BST in the first place. To do this, we perform an **in-order traversal** of the tree.
 
-- Note: Time complexities assume you are calling these methods on the root node.
+| SPACE   | `O(n)`    |
+|---------|-----------|
 
-- **Space Complexity**: `O(n)`
+###### Usage
 
-Subtype: There is an auto-balancing binary search tree called **AVL tree** where every node also stores the number of children to its left and right and it uses that as a sort of balancing metric. When you insert, you can get it down to the worst case being log(n), and so you can actually get your inserts to maintain a balanced tree in log(n) every time.
+- Used for searching: the structure of the BST makes looking for the node with the maximum and minimum values very easy.
 
-2\) **N-ary Tree (Poly Tree)**
-- Can have an arbitrary number of children.
-- Does not have the additional restriction of the search tree above.
-- Note: complexities for the Poly Tree and Binary Tree are the same.
+-------------------------------------------------
 
-- **Time Complexity**
+###### Subtypes
 
-Method | Avg. Case| Worst Case | Best Case | Notes
+-------------------------------------------------
+
+###### 1a) AVL tree
+
+> There is an **auto-balancing**, or **self-balancing**, BST called **AVL tree** where every node also stores the number of children to its left and right and it uses that as a sort of balancing metric. When you insert, you can get it down to the worst case being `O(logn)`, and so you can actually get your inserts to maintain a balanced tree in `log(n`) every time
+
+| | Time Avg.| Time Worst | Time Best | Notes
 ---    | ---      | ---        | ---       | ---
-`add_child` | O(1) |    O(1)   |     O(1)  |
-`remove_child` | O(n) | O(n)   | O(n)      |
-`count` |  O(n)    |     O(n)   |    O(1)  |
+INSERTION | **`O(logn)`** | `O(logn)`    |  `O(1)`    |
+DELETION | **`O(logn)`** |   |  `O(1)`    |
+SEARCH | **`O(logn)`** |  | `O(1)` |
+TRAVERSAL | **`O(n)`** | `O(n)` | `O(n)` |
 
-- Note: Time complexities assume you are calling these methods on the root node.
+| SPACE   | `O(n)`    |
+|---------|-----------|
 
-- **Space Complexity**: `O(n)`
+###### 1b) Red Black Tree
 
-3\) [**Trie**](https://en.wikipedia.org/wiki/Trie)
+Red black tree is a height-balanced bst data structure which slightly relief on its height balance restriction by introducing red and black color as a balance factor. Unlike AVL tree which strictly require its balance factor(height) should keep the same in each node, red black tree require 5 properties and provide less rotation in both insertion and deletion operations. Below list 5 properties and inspections about this data structure.
+
+It guarantee each insertion at most need 2 rotations and 3 rotations for each deletion.
+
+5 properties are:
+
+1. A node must be colored as RED or BLACK.
+2. Root must be BLACK color.
+3. Null node must be colored as BLACK.
+4. There has no two consecutive RED nodes connected. Which means if a node is RED, then its father and children should be BLACK. If a node is RED, its left or right node must BOTH be BLACK.
+5. Any node has the same BLACK count from itself to the every leaf node.
+
+Due to above properties, red black tree guarantee the height would be at most `2*log(n+1)`, you can prove it by [mathematical induction](http://www.cnblogs.com/skywang12345/p/3245399.html).
+
+###### Complexity
+
+| | Time Avg.| Time Worst | Time Best | Notes
+---    | ---      | ---        | ---       | ---
+INSERTION | **`O(logn)`** | `O(logn)`     |   `O(logn)`    |
+DELETION | **`O(logn)`** |  `O(logn)`  |   `O(logn)`    |
+SEARCH | **`O(logn)`** |  `O(logn)` |  `O(logn)` |
+TRAVERSAL | **`O(n)`** | `O(n)` | `O(n)` |
+
+| SPACE   | `O(n)`     |
+|---------|-----------|
+
+-------------------------------------------------
+
+##### 2\) Trie
+
+> <https://en.wikipedia.org/wiki/Trie>
 
 - A kind of **search tree**.
 - Also called `digital tree` or `prefix tree`.
@@ -783,16 +895,20 @@ Method | Avg. Case| Worst Case | Best Case | Notes
   - All the descendants of a node have a common **prefix** of the string associated with that node, and the root is associated with the **empty string**.
   - Keys tend to be associated with leaves, though some inner nodes may correspond to keys of interest. Hence, keys are not necessarily associated with every node.
 
-4\) [**Radix Tree**](https://en.wikipedia.org/wiki/Radix_tree)
+##### 3\) Radix Tree
+
+> <https://en.wikipedia.org/wiki/Radix_tree>
 
 - Also called a `radix trie` or `compact prefix tree`.
 - Represents a **space-optimized trie** in which each node that is the only child is merged with its parent.
 
-4a) [**Crit-bit Tree**](http://cr.yp.to/critbit.html)
+###### 3a\) Crit-bit Tree
+
+> <http://cr.yp.to/critbit.html>
 
 - A condensed **radix trie**, generally yielding better performance due to the reduced number of pointers involved in maintaining nodes of the tree (and they’re significantly more compact than **trie** implementations requiring more pointers).
 
-### Usefulness
+#### Usefulness
 
 - Binary Search Tree: maintains order and has fast search, insertion and deletion.
   - Used on databases to perform quick searches (e.g., indexing in Rails used a sorted tree to make lookup time go from linear to logarithmic)
@@ -800,17 +916,73 @@ Method | Avg. Case| Worst Case | Best Case | Notes
   - Operating Systems use a tree structure to store files.
   - HTML `DOM` uses a tree data structure to represent the hierarchy of elements.
   - **Expression trees**: The tree structure is also used to parse arithmetic and Boolean expressions.
-- **Crit-bit Tree**: used by the [Fastly CDN](https://www.fastly.com/blog/surrogate-keys-part-2) for its surrogate key functionality.``
+- **Crit-bit Tree**: used by the [Fastly CDN](https://www.fastly.com/blog/surrogate-keys-part-2) for its surrogate key functionality.
 
-**Ruby**
+-------------------------------------------------
 
-- [Tree - Poly Tree implementation](./ruby/poly_tree.rb)
+#### Ternary Tree
+
+-------------------------------------------------
+
+> A tree data structure in which each node has at most three children
+>
+- Any node can have either zero, one, or two children.
+- No notion of order
+
+-------------------------------------------------
+
+#### Unary Tree
+
+-------------------------------------------------
+
+> A tree data structure in which each node has at most one child
+>
+- Any node can have either zero or one children.
+- No notion of order
+
+-------------------------------------------------
+
+#### N-ary Tree (Poly Tree)
+
+-------------------------------------------------
+
+> A tree data structure in which each node can have an arbitrary number of children
+>
+- Any node can have from 0 to `n-1` children.
+- No notion of order
+- **Note**: complexities for the Poly Tree and Binary Tree are the same.
+
+##### Complexity
+
+- Note: Time complexities assume you are calling these methods on the root node.
+
+| | Avg. Case| Worst Case | Best Case | Notes
+---    | ---      | ---        | ---       | ---
+`add_child` | **`O(1)`** |    `O(1)`   |     `O(1)`  |
+`remove_child` | **`O(n)`** | `O(n)`   | `O(n)`      |
+`count` |  **`O(n)`**   |     `O(n)`   |    `O(1)`  |
+
+| SPACE   | `O(n)`    |
+|---------|-----------|
+
+-------------------------------------------------
+
+### Code References
+
+> **Ruby**
+>
+> - [Polytree Node implementation](ruby/trees/poly_tree_node.rb)
+> - [Binary Search Tree implementation](ruby/trees/bst.rb)
+>
+>**Python**
+>
+> - [Binary Search Tree implementation](python/trees/bst.py)
 
 -------------------------------------------------
 
 ## Graph
 
-> A graph is a set of vertices and edges that form connections between the vertices.
+> A **graph** is a set of vertices and edges that form connections between the vertices.
 
 ### Terminology
 

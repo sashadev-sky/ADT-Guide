@@ -1,4 +1,4 @@
-require_relative 'linked_list'
+require_relative './linked_list/linked_list'
 
 class HashMap
   include Enumerable
@@ -48,9 +48,9 @@ class HashMap
     "{\n" + pairs.join(",\n") + "\n}"
   end
 
-  alias_method :inspect, :to_s
-  alias_method :[], :get
-  alias_method :[]=, :set
+  alias inspect to_s
+  alias [] get
+  alias []= set
 
   private
 

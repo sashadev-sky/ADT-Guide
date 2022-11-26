@@ -1,21 +1,28 @@
-from typing import Any, Optional
-from python.data_structures.node import SinglyNode
+from typing import Any, Generic, Iterator, TypeVar
 
+from python.linked_list.node import SinglyNode
+from python.utils.errors import StackUnderflowError
 
-class ArrayStack:
-    def __init__(self):
-        self.stack = []
+T = TypeVar('T')
 
-    def push(self, el: Any) -> None:
+class ArrayStack(Generic[T]):
+    def __init__(self) -> None:
+        self.stack: list[T] = []
+
+    def push(self, el: T):
         self.stack.append(el)
 
-    def pop(self) -> Any:
+    def pop(self) -> T:
+        if not self.stack:
+            raise StackUnderflowError
         return self.stack.pop()
 
-    def peek(self) -> Any:
-        return self.stack.last
+    def peek(self) -> T:
+        if not self.stack:
+            raise StackUnderflowError
+        return self.stack[-1]
 
-    def empty(self) -> bool:
+    def empty(self):
         """Check if the stack is empty.
 
         :return: True if stack is empty, else False
@@ -30,7 +37,7 @@ class LinkedListStack:
         self.top = None
         self.size = 0
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[Any]:
         curr = self.top
         while curr:
             val = curr.val
@@ -38,16 +45,9 @@ class LinkedListStack:
             yield val
 
     def __str__(self) -> str:
-        print('Printing Stack state...')
-        if self.empty():
-            return '[]'
-        f'[{"->".join([str(node) for node in self])}]'
-        print('Stack Pointer')
-        print(' |')
-        print(' V')
-        return f'[{"->".join([str(node) for node in self])}]'
+        return '[]' if self.empty() else f'[{"->".join([str(node) for node in self])}]'
 
-    def push(self, key, value) -> None:
+    def push(self, key, value: Any) -> None:
         """Add node to the top of the stack"""
         node = SinglyNode(key, value)
         if self.top:
@@ -55,7 +55,7 @@ class LinkedListStack:
         self.top = node
         self.size += 1
 
-    def pop(self) -> Optional[SinglyNode]:
+    def pop(self) -> SinglyNode | None:
         """
         Remove the top element from the stack and return it, or return
         None if the stack is empty
@@ -67,7 +67,7 @@ class LinkedListStack:
             self.top = self.top.next if self.top.next else None
             return node
 
-    def peek(self) -> Optional[Any]:
+    def peek(self) -> SinglyNode | None:
         """Get the value of the top element from the stack.
 
         :return: the top element from the stack, or None if the stack is empty
@@ -86,7 +86,7 @@ class LinkedListStack:
 
 
 if __name__ == '__main__':
-    arr_stack = ArrayStack()
+    arr_stack: ArrayStack[Any] = ArrayStack()
     print(arr_stack.empty())  # True
 
     ll_stack = LinkedListStack()
