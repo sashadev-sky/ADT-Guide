@@ -28,16 +28,18 @@ class DoublyLinkedListQueue:
         self.size += 1
 
     def dequeue(self):
-        if self.head:
-            node = self.head
-            self.size -= 1
+        if not self.head:
+            raise IndexError('pop from empty queue')
 
-            if self.size == 0:
-                self.head = self.tail = None
-            else:
-                self.head = node.next
-                node.prev = None
-            return node.val
+        node = self.head
+        self.size -= 1
+
+        if self.size == 0:
+            self.head = self.tail = None
+        else:
+            self.head = node.next
+            node.prev = None
+        return node.val
 
     def first(self):
         return self.head.val

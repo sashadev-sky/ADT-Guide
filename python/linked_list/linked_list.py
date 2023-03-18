@@ -263,7 +263,7 @@ class CircularlyLinkedList(DoublyLinkedList):
                 next_node.prev = prev
                 self.size -= 1
                 return curr.val
-            prev == curr
+            prev = curr
             curr = curr.next
         return None
 
@@ -332,3 +332,5 @@ if __name__ == '__main__':
     my_circularly_list.append('link4', 5)
     my_circularly_list.append('link5', 5)
     print(my_circularly_list)  # [0->2->5->5->0]
+    my_circularly_list.remove('link3')
+    print(my_circularly_list)  # [0->5->5->0]

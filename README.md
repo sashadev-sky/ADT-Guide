@@ -405,8 +405,10 @@ Method  |  Worst Case | Notes
 ### Usage
 
 - Recursion (stack frame)
-- The 'back' button of our web browser
-- Syntax checking; matching opening and closing parentheses (e.g., in regex, math equations, etc.) to be specific.
+- The 'back' button of our web browser.
+  - Web browsers, often use two stacks to move backward and forward through your browsing history.
+- Syntax checking; matching opening and closing parentheses (e.g., in regex, math equations, compilers etc.) to be specific.
+- Backtracking algorithms
 - Ideal as a temporary container for temporary data
 
 ### Sub-Types
@@ -498,6 +500,9 @@ Method | Worst Case | Best case | Notes
 
 - Printing queues
 - Handling asynchronous requests - queues ensure that requests are processed in the order in which they are received
+- Operating systems use queues to handle requests to write data to a hard disk drive, stream audio and video, and send and receive network packets
+- Web servers, on the other hand, use queues to handle incoming requests
+  - Whenever you see a “buffering” message, it means the software system you are using is probably waiting for incoming data to add to its queue for processing.
 - Internally, a list is represented as an array; the largest costs come from growing beyond the current allocation size (because everything must move), or from inserting or deleting somewhere near the beginning (because everything after that must move). **If you need to add/remove at both ends, consider using a `collections.deque` instead.**
   - A deque (double-ended queue) is represented internally as a doubly linked list. (Well, a list of arrays rather than objects, for greater efficiency.) Both ends are accessible, but even looking at the middle is slow, and adding to or removing from the middle is slower still.
 
@@ -576,7 +581,16 @@ The deque abstract data type is more general than both the stack and the queue A
 
 #### Implementations
 
-##### 1\) Array
+##### Array
+
+<details><summary>Circular queue makes it possible to use a fixed array storage, as the data structure to efficiently implement a queue,
+
+such that the `enqueue()` and `dequeue()` operations
+have `O(1)` performance...
+</summary>
+
+...This approach is known as a circular queue, which makes the novel suggestion that the first value in the array isn’t always `storage[0]`. Instead, keep track of first, the index for the oldest value in the queue, and last, the index where the next enqueued value will be placed
+</details>
 
 - In a circular queue, we use a **fixed array** and two pointers, `head` and `tail`. `head` indicates the start position of the queue while `tail` indicates the ending position of the queue.
 - The first value in the array isn’t always at index 0.
