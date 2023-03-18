@@ -84,7 +84,7 @@ Method    | Avg. Case |Worst Case | Best Case  | Notes
       - Keeping the size of the array fixed allows us to maintain a contiguous place in memory.
       - | | Complexity | Notes
         --- | ---    | ---
-        Time | `O(1)` |  | Improved
+        Time | `O(1)` |  Improved
         Space | `O(range)` | Abysmal
     - b\) `IntSet`: Building on point a - augment to store sub-arrays (buckets) instead of T/F for the values. When we insert an integer into the set, use the modulo operator to deterministically assign every integer to a bucket: `index = integer_val % num_buckets`
       - Augmented to keep track of an arbitrary range of integers, including negative integers
@@ -98,7 +98,7 @@ Method    | Avg. Case |Worst Case | Best Case  | Notes
       - | | Complexity | Notes
         --- | ---    | ---
         Time | `O(1)` | Improved - amortized
-        Space | `O(n)` |
+        Space | `O(n)` | Same as point b
 
 2\) **Hash Set**
 
