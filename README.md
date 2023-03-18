@@ -239,8 +239,8 @@ Method    | Avg. Case | Worst Case | Best Case   | Notes
 
 > **Ruby**
 >
-> - [Map - hash map implementation](ruby/hash_map.rb)
-> - [Map - 2D array-based implementation](ruby/array_map.rb)
+> - [Map - hash map implementation](ruby/map/hash_map.rb)
+> - [Map - 2D array-based implementation](ruby/map/array_map.rb)
 >
 >**Python**
 >

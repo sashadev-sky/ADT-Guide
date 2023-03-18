@@ -1,4 +1,4 @@
-require_relative './linked_list/linked_list'
+require_relative '../linked_list/linked_list'
 
 class HashMap
   include Enumerable
