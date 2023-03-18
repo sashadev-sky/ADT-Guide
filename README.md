@@ -157,8 +157,8 @@ Method    | Amortized   | Worst case  | Notes
 
 > **Ruby**
 >
-> - [Set - array implementations](ruby/array_set.rb)
-> - [Set - hash implementation](ruby/hash_set.rb)
+> - [Set - array implementations](ruby/set/array_set.rb)
+> - [Set - hash implementation](ruby/set/hash_set.rb)
 >
 >**Python**
 >
@@ -415,7 +415,7 @@ Method  |  Worst Case | Notes
 
 > **Ruby**
 >
-> - [Stack - array implementation](ruby/array_stack.rb)
+> - [Stack - array implementation](ruby/stack/array_stack.rb)
 >
 >**Python**
 >

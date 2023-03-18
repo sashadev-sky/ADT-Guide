@@ -1,5 +1,3 @@
-# Modification a:
-
 class MaxIntSet
   def initialize(max)
     @store = Array.new(max, false)
@@ -38,8 +36,6 @@ end
 
 # -----------------------------------------------------------
 
-# Modification b:
-
 class IntSet
   def initialize(num_buckets = 20)
     @store = Array.new(num_buckets) { [] }
@@ -72,8 +68,6 @@ class IntSet
 end
 
 # -----------------------------------------------------------
-
-# Modification c:
 
 class ResizingIntSet
   attr_reader :count
