@@ -79,23 +79,31 @@ Method    | Avg. Case |Worst Case | Best Case  | Notes
 - **Analysis**
   - Could do better. The array's fastest operation is indexing and that is not used.
   - Modifications:
-    - a\) Restrict data type to only integers that live in a predefined range (the array is fixed size). Their value will correspond to an index in the array and the value at that index will correspond to its presence (either true or false)
+    - a\) `MaxIntSet`: Restrict data type to only integers that live in a predefined range (the array is fixed size). Their value will correspond to an index in the array and the value at that index will correspond to its presence (either true or false)
       - e.g., the set { 0, 2, 3 } will be stored as `[true, false, true, true]`
       - Keeping the size of the array fixed allows us to maintain a contiguous place in memory.
-      - Improved time complexity `O(1)`, abysmal space complexity `O(range)`
-    - b\) Building on point a: augment to store sub-arrays (buckets) instead of T/F for the values. When we insert an integer into the set, use the modulo operator to deterministically assign every integer to a bucket: `index = integer_val % num_buckets`
+      - | | Complexity | Notes
+        --- | ---    | ---
+        Time | `O(1)` |  | Improved
+        Space | `O(range)` | Abysmal
+    - b\) `IntSet`: Building on point a - augment to store sub-arrays (buckets) instead of T/F for the values. When we insert an integer into the set, use the modulo operator to deterministically assign every integer to a bucket: `index = integer_val % num_buckets`
       - Augmented to keep track of an arbitrary range of integers, including negative integers
       - Array is still fixed size
-      - Fine for smaller sample sizes, but as our sample size increases will rely more and more on an array scan - `O(n)` time complexity - which were trying to avoid
-      - Improved space complexity `O(n)`
-    - c\) Building on point b: resize the array by a constant multiple that scales with the number of buckets. The goal is to have `buckets.length > N` at all times
+      - | | Complexity | Notes
+        --- | ---    | ---
+        Time | `O(n)` |  Fine for smaller sample sizes, but as our sample size increases will rely more and more on an array scan - which were trying to avoid
+        Space | `O(n)` | Improved
+    - c\) `ResizingIntSet`: Building on point b - resize the array by a constant multiple that scales with the number of buckets. The goal is to have`buckets.length > N` at all times
       - The array is no longer a fixed size.
-      - Improved time complexity `O(1)` amortized, space complexity stays at `O(n)`
+      - | | Complexity | Notes
+        --- | ---    | ---
+        Time | `O(1)` | Improved - amortized
+        Space | `O(n)` |
 
 2\) **Hash Set**
 
 - A Hash Set uses a hash function to compute an index into an array of buckets (sub-arrays)
-- This implementation will be a simple improvement to "modification c" from the array-based set implementations above:
+- This implementation will be a simple improvement to `ResizingIntSet` from the array-based set implementations above:
   - Modulo the hash of every item (returns an integer) by the # of buckets instead of the original integer value.
 - With this simple construction, the set will be able to handle keys of any data type that can be hashed.
   - e.g., { 2, 4, 8, 16, “hello”, “dolly” }
