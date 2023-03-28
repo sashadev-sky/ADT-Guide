@@ -83,9 +83,11 @@ Set operations
 
 ##### Time and Space Complexity
 
+> Avg. case is `O(n/k)`, where `n` is the number of elements in the hash set and `k` is the number of buckets. When the hash set is properly managed, the average-case lookup time complexity of `O(n/k)` will be close to `O(1)`.
+
 Method    | Amortized   | Worst case  | Notes
 ---       | ---         |  ---        | --- |
-`include?`| `O(1)`      |   `O(n)`      | Worst case is in rare case when all keys collide into a single bucket, making it a linear search. Avg. case is `O(n/k)`, where `n` is the number of elements in the hash set and `k` is the number of buckets
+`include?`| `O(1)`      |   `O(n)`      | Worst case is in rare case when all keys collide into a single bucket, making it a linear search.
 `insert`  | `O(1)`      |   `O(n)`      | Worst case is in rare case of a hash collision
 `delete`  | `O(1)`      |   `O(n)`      | Worst case is in rare case of a hash collision
 
