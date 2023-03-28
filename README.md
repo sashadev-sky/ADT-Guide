@@ -84,8 +84,8 @@ Set operations
 ##### Time and Space Complexity
 
 Method    | Amortized   | Worst case  | Notes
----       | ---         |  ---        | ---
-`include?`| `O(1)`      |   `O(n)`      |
+---       | ---         |  ---        | --- |
+`include?`| `O(1)`      |   `O(n)`      | Worst case is in rare case when all keys collide into a single bucket, making it a linear search. Avg. case is `O(n/k)`, where `n` is the number of elements in the hash set and `k` is the number of buckets
 `insert`  | `O(1)`      |   `O(n)`      | Worst case is in rare case of a hash collision
 `delete`  | `O(1)`      |   `O(n)`      | Worst case is in rare case of a hash collision
 

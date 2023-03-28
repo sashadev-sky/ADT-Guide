@@ -1,29 +1,32 @@
+# The provided implementation is a basic hash set that uses separate
+# chaining for handling hash collisions.
 class HashSet
   attr_reader :count
 
   def initialize(num_buckets = 8)
     @store = Array.new(num_buckets) { [] }
     @count = 0
+    @load_factor = 0.75
   end
 
   def insert(key)
     return false if include?(key)
 
-    self[key.hash] << key
+    self[bucket_index(key)] << key
     @count += 1
-    resize! if num_buckets < @count
+    resize! if needs_resizing?
 
     key
   end
 
   def include?(key)
-    self[key.hash].include?(key)
+    self[bucket_index(key)].include?(key)
   end
 
   def remove(key)
     return nil unless include?(key)
 
-    self[key.hash].delete(key)
+    self[bucket_index(key)].delete(key)
     @count -= 1
   end
 
@@ -31,6 +34,10 @@ class HashSet
 
   def num_buckets
     @store.length
+  end
+
+  def needs_resizing?
+    @count.to_f / num_buckets >= @load_factor
   end
 
   def resize!
@@ -41,8 +48,12 @@ class HashSet
     old_store.flatten.each { |key| insert(key) }
   end
 
+  def bucket_index(key)
+    key.hash % num_buckets
+  end
+
   def [](num)
-    @store[num % num_buckets]
+    @store[num]
   end
 end
 
