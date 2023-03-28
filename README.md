@@ -62,6 +62,10 @@ Set operations
 - `difference(set)`: Returns a new set containing the elements present in the original set but not in the input set.
 - `subset(set)`: Checks if the original set is a subset of the input set, meaning all elements of the original set are also present in the input set.
 
+### Terminology
+
+- **Hash function**: A function that generates a value of fixed length for each input it receives. For any given input, the output will always be the same.
+
 ### Implementations
 
 1. [Hash Set](#hash-set)
