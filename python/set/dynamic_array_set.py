@@ -1,4 +1,4 @@
-from typing import Hashable, Iterable, Iterator, Self
+from typing import Hashable, Iterable, Iterator
 
 
 class DynamicArraySet:

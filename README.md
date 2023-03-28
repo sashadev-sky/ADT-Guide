@@ -3,10 +3,9 @@
 > Abstract data types (ADTs) refer to classes of objects whose operations and properties are formally defined, but are not restricted to specific implementations.
 
 This is a repository of ADTs written in Ruby and, more recently, Python
-(CPython). It is an exercise in implementing abstract data structures in my
-own code and a guide for practical application in the future.
+(CPython). It is an exercise in implementing an ADT with different data structures and a guide for practical application in the future.
 
-It is not intended to cover all the API variations and implementations for a particular abstract data structure.
+It is not intended to cover all the API variations and implementations for a particular abstract data type.
 
 I define the following ADTs, including their specifications, common operations in their API, and possible implementations with comparisons. I also link my code at the bottom of each section.
 
@@ -45,92 +44,66 @@ Note that many of the ADTs have their own nomenclature, so the same methods may 
 
 - Unordered (no promises regarding insertion order)
 - Unique collection of elements (no duplicates)
-- Mutability
-  - Mutable:
-    - Python: built-in type `set` derives from `MutableSet` (subclass of `Set`)
-  - Immutable (read-only):
-    - Python: built-in type `frozenset` derives from `Set` and `Hashable`
+- Immutable elements: Although not a strict requirement, it is generally a good practice to use immutable elements in a set to ensure the integrity of the set's structure.
 
 ### API
+
+Basic operations
 
 - `insert(el)`: inserts a new element
 - `include?(el)`: queries for an element
 - `delete(el)`: removes an element
+- `size()`: Returns the number of elements in the set.
+
+Set operations
+
+- `union(set)`: Returns a new set containing all elements from the original set and the input set, without duplicates.
+- `intersection(set)`: Returns a new set containing the elements present in both the original set and the input set.
+- `difference(set)`: Returns a new set containing the elements present in the original set but not in the input set.
+- `subset(set)`: Checks if the original set is a subset of the input set, meaning all elements of the original set are also present in the input set.
 
 ### Implementations
 
-1\) **Array-Based Set**
+1. [Hash Set](#hash-set)
 
-- Contiguously stored data
-- Don't allow it to be indexed into
-- Elements aren't required to be hashable
-- Goal is a smaller data structure
+#### Hash Set
 
-- **Time Complexity**
-
-Method    | Avg. Case |Worst Case | Best Case  | Notes
- ---      | --- |    ---        | ---        | ---
- `include?` |  `O(n)` | `O(n)`       |  `O(1)`      | Worst: searching for the last element. Best: searching for the first element |
- `insert`  |  `O(n)`  | `O(n)`       |  `O(1)`      | Check for inclusion before inserting. Because sets have no notion of order, you never select a specific index to insert. Best case is empty set |
- `delete`  |  `O(n)`   | `O(n)`       |   `O(1)`    | Need to scan through elements to find the one to delete |
-
-- **Space Complexity**: `O(n)`
-
-- **Analysis**
-  - Could do better. The array's fastest operation is indexing and that is not used.
-  - Modifications:
-    - a\) `MaxIntSet`: Restrict data type to only integers that live in a predefined range (the array is fixed size). Their value will correspond to an index in the array and the value at that index will correspond to its presence (either true or false)
-      - e.g., the set { 0, 2, 3 } will be stored as `[true, false, true, true]`
-      - Keeping the size of the array fixed allows us to maintain a contiguous place in memory.
-      - | | Complexity | Notes
-        --- | ---    | ---
-        Time | `O(1)` |  Improved
-        Space | `O(range)` | Abysmal
-    - b\) `IntSet`: Building on point a - augment to store sub-arrays (buckets) instead of T/F for the values. When we insert an integer into the set, use the modulo operator to deterministically assign every integer to a bucket: `index = integer_val % num_buckets`
-      - Augmented to keep track of an arbitrary range of integers, including negative integers
-      - Array is still fixed size
-      - | | Complexity | Notes
-        --- | ---    | ---
-        Time | `O(n)` |  Fine for smaller sample sizes, but as our sample size increases will rely more and more on an array scan - which were trying to avoid
-        Space | `O(n)` | Improved
-    - c\) `ResizingIntSet`: Building on point b - resize the array by a constant multiple that scales with the number of buckets. The goal is to have`buckets.length > N` at all times
-      - The array is no longer a fixed size.
-      - | | Complexity | Notes
-        --- | ---    | ---
-        Time | `O(1)` | Improved - amortized
-        Space | `O(n)` | Same as point b
-
-2\) **Hash Set**
-
-- A Hash Set uses a hash function to compute an index into an array of buckets (sub-arrays)
-- This implementation will be a simple improvement to `ResizingIntSet` from the array-based set implementations above:
-  - Modulo the hash of every item (returns an integer) by the # of buckets instead of the original integer value.
-- With this simple construction, the set will be able to handle keys of any data type that can be hashed.
+- Data is not contiguously stored
+- Store elements in sub-arrays (buckets) in an array: when we insert an element into the set, use the modulo operator to deterministically assign every element to a bucket: `index = hash(value) % num_buckets`
+  - Elements are required to be hashable
+  - Hashing the element's value returns an integer that is a valid index, allowing the set to handle keys of any data type that can be hashed.
   - e.g., { 2, 4, 8, 16, “hello”, “dolly” }
+- Don't allow it to be indexed into
+  - Use the same **hashing function** to compute an index into it.
+- Array should be dynamic: resize the array by a constant multiple that scales with the number of buckets. The goal is to have `buckets.length > N` at all times.
+  - This ensures that as our sample size increases, we don't rely more and more on a linear scan to find elements
 
 > Note: in Ruby and Python, Sets are implemented as a hash table
 >
-- **Time Complexity**
+
+##### Time and Space Complexity
 
 Method    | Amortized   | Worst case  | Notes
 ---       | ---         |  ---        | ---
-`include?`| `O(1)`        |   `O(n)`      | Worst case is in rare case of a hash collision
-`insert`  | `O(1)`        |   `O(n)`      | Worst case is in rare case of a hash collision
-`delete`  | `O(1)`        |   `O(n)`      | Worst case is in rare case of a hash collision
+`include?`| `O(1)`      |   `O(n)`      |
+`insert`  | `O(1)`      |   `O(n)`      | Worst case is in rare case of a hash collision
+`delete`  | `O(1)`      |   `O(n)`      | Worst case is in rare case of a hash collision
 
-- Ruby handles a `hash collision` with `separate chaining`.
-- Python handles a `hash collision` with open addressing.
+|   SPACE | `O(n)`    |
+|---------|-----------|
+
+##### Analysis
+
+- Ruby handles a hash collision with **separate chaining**.
+- Python handles a hash collision with **open addressing**.
 
 - The maximum `density` (# of items chained at a location in memory) Ruby allows before `rehashing` is 5, which is `O(n)` time complexity.
 
-- **Space Complexity**: `O(n)`
-
-- **Analysis**:
-  - A Hash Set is the fastest implementation of a Set: the hash uses a hashing function to store elements in memory and to later access where they are stored.
-    - This creates the highest chance of uniform distribution because there is no pattern to the output, although there is still the chance of a hash collision.
-    - We want to use a Hash Set over an array-based set most of the time.
-    - Useful if you want to ensure absolutely no duplicates - Hash Maps can have duplicate values (but not keys).
-  - **Although it isn’t particularly compact (requires pre-allocation of memory), it provides near constant time insertion and removal in the average case.**
+- A Hash Set is the fastest implementation of a Set: the hash uses a hashing function to store elements in memory and to later access where they are stored.
+  - This creates the highest chance of uniform distribution because there is no pattern to the output, although there is still the chance of a hash collision.
+  - We want to use a Hash Set over an array-based set most of the time.
+  - Useful if you want to ensure absolutely no duplicates - Hash Maps can have duplicate values (but not keys).
+- **Although it isn’t particularly compact (requires pre-allocation of memory), it provides near constant time insertion and removal in the average case.**
 
 ### Usefulness
 
@@ -159,13 +132,11 @@ Method    | Amortized   | Worst case  | Notes
    must be re-hashed to find its new place. With millions of keys, this resize operation becomes prohibitively expensive. **(We basically have to double the table size when we run out of space)**.
   - **The fundamental problem with these methods is that they require some level of runtime tuning.**
     - For ex., for the [Fastly CDN](https://www.fastly.com/blog/surrogate-keys-part-2), the time required to complete this operation could cause it to pause for a significant time period — significant enough to cause it to appear to “miss” purge requests for surrogate keys.
-  - An example of a contiguous memory 2D array structure: an image - its really just a 2-D array of pixels.
 
 ### Code References
 
 > **Ruby**
 >
-> - [Set - array implementations](ruby/set/array_set.rb)
 > - [Set - hash implementation](ruby/set/hash_set.rb)
 >
 >**Python**
@@ -177,11 +148,15 @@ Method    | Amortized   | Worst case  | Notes
 
 ## Map
 
-> At its essence, a **Map** is just an unordered set of key-value pairs.
+> At its essence, a **Map** is just an unordered collection of key-value pairs.
 
 ### Terminology
 
-- Also called a `Dictionary`, `Associative Array` and `Hash Table`.
+- Also called a **Dictionary** and **Associative Array**
+- **Hash Table**: conceptually the same as a **Hash Map**, though not in practice - Java has both `HashMap` and `Hashtable` classes with different underlying implementations / use cases due to historical reasons (`HashMap` is newer).
+  - It is a **data strucure** that implements a Map. It allows for the efficient storage and retrieval of values based on associated keys.
+  - A hash table uses a **hash function** to compute an index, also called a **hash code**, into an array of buckets or slots, from which the desired value can be found.
+  - From the client code's perspective, elements are accessed using a key rather than an index number.
 
 ### Specifications
 
@@ -196,36 +171,17 @@ Method    | Amortized   | Worst case  | Notes
 
 ### Implementations
 
-1\) **Hash Map** :
+The underlying implementations below are similar to the ones for the Set. The main difference is that the Map implementations allow for duplicate values (but not keys) and the Set implementations do not.
 
-> **Hash Map vs. Hash Set**
->
-> Hash Map implements the Map interface and Hash Set implements the Set interface. The main difference is that the Hash Map allows for duplicate values (but not keys) and the Hash Set does not.
+1. [2D array-based Map](#2d-array-based-map)
+2. [Hash Map](#hash-map)
 
-- For the Hash Map implementation, the internals will basically be the same, but we will use a Doubly Linked List for our buckets instead of sub-arrays so that we can use link objects that store both a key and a value in one node together.
-  - We could also just use touples, but the Linked List is the classic, canonical way to implement a Hash Map.
-
-- **Hash table**  - A hash table is a form of list where elements are accessed by a keyword rather than an index number. At least, this is how the client code will see it.
-  Internally, it will use a slightly modified version of our hashing function in order to find the index position in which the element should be inserted.
-  This gives us fast lookups, since we are using an index number which corresponds to the hash value of the key.
-
-- **Time Complexity**
-
-Method    | Amortized   | Worst Case  | Notes
----       | ---         |  ---        | ---
-`get`     | `O(1)`        |   `O(n)`      | Worst case is in rare case of a hash collision
-`set`     | `O(1)`        |   `O(n)`      | Worst case is in rare case of a hash collision
-`delete`  | `O(1)`        |   `O(n)`      | Worst case is in rare case of a hash collision
-
-- **Space Complexity**: `O(n)`
-
-- Note: the time and space complexities are the same as for the Hash Set.
-
-2\) **2D array-based Map**:
+#### 2D array-based Map
 
 - Also called a `touple`.
 - The array will contain several subarrays, and each subarray will contain a k,v pair.
-- **Time Complexity**
+
+##### Time and Space Complexity
 
 Method    | Avg. Case | Worst Case | Best Case   | Notes
 ---       | --- | ---         |  ---        | ---
@@ -233,9 +189,33 @@ Method    | Avg. Case | Worst Case | Best Case   | Notes
 `set`     |   `O(n)` | `O(n)`      |  `O(1)`       |
 `delete`  |  `O(n)` |  `O(n)`      |  `O(1)`       |
 
-- **Space Complexity**: `O(n)`
+  |   SPACE | `O(n)`    |
+  |---------|-----------|
 
 - Note: the time and space complexities are the same as for the array-based set.
+
+---
+
+#### Hash Map
+
+- For the Hash Map implementation, the internals will basically be the same, but we will use a Doubly Linked List for our buckets instead of sub-arrays so that we can use link objects that store both a key and a value in one node together.
+  - We could also just use touples, but the Linked List is the classic, canonical way to implement a Hash Map.
+- A hash table is a form of list where elements are accessed by a keyword rather than an index number. At least, this is how the client code will see it.
+  Internally, it will use a slightly modified version of our hashing function in order to find the index position in which the element should be inserted.
+  This gives us fast lookups, since we are using an index number which corresponds to the hash value of the key.
+
+##### Time and Space Complexity
+
+Method    | Amortized   | Worst Case  | Notes
+---       | ---         |  ---        | ---
+`get`     | `O(1)`        |   `O(n)`      | Worst case is in rare case of a hash collision
+`set`     | `O(1)`        |   `O(n)`      | Worst case is in rare case of a hash collision
+`delete`  | `O(1)`        |   `O(n)`      | Worst case is in rare case of a hash collision
+
+  |   SPACE | `O(n)`    |
+  |---------|-----------|
+
+- Note: the time and space complexities are the same as for the Hash Set.
 
 ### Usefulness
 
@@ -839,7 +819,7 @@ graph searchtree {
 
 - Key operations, namely `#find`, `#insert`, and `#delete`, should run fast on this data structure.
 
-###### Complexity
+###### Time and Space Complexities
 
 - Note: time complexities assume you are calling these methods on the root node.
 
@@ -865,7 +845,7 @@ TRAVERSAL | **`O(n)`** | `O(n)` | `O(n)` | It's often the case that we want to g
 
 ###### 1a) AVL tree
 
-> There is an **auto-balancing**, or **self-balancing**, BST called **AVL tree** where every node also stores the number of children to its left and right and it uses that as a sort of balancing metric. When you insert, you can get it down to the worst case being `O(logn)`, and so you can actually get your inserts to maintain a balanced tree in `log(n`) every time
+> There is an **auto-balancing**, or **self-balancing**, BST called **AVL tree** where every node also stores the number of children to its left and right and it uses that as a sort of balancing metric. When you insert, you can get it down to the worst case being `O(logn)`, and so you can actually get your inserts to maintain a balanced tree in `log(n)` time every time
 
 | | Time Avg.| Time Worst | Time Best | Notes
 ---    | ---      | ---        | ---       | ---

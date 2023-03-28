@@ -45,3 +45,19 @@ class HashSet
     @store[num % num_buckets]
   end
 end
+
+if $PROGRAM_NAME == __FILE__
+  set = HashSet.new
+  set.insert(1)
+  set.insert('hey')
+  puts set.include?(1) # => true
+  puts set.include?(2) # => false
+  set.insert(-300)
+  set.insert(2)
+  set.insert(3)
+  set.insert(400)
+  set.insert(-500)
+  set.insert('hi')
+
+  p set
+end

@@ -1,4 +1,4 @@
-from typing import Any, Generic, Iterator, TypeVar
+from typing import Any, Generic, TypeVar
 
 from python.linked_list.node import SinglyNode
 from python.utils.errors import StackUnderflowError
@@ -6,20 +6,20 @@ from python.utils.errors import StackUnderflowError
 T = TypeVar('T')
 
 class ArrayStack(Generic[T]):
-    def __init__(self) -> None:
+    def __init__(self):
         self.stack: list[T] = []
 
     def push(self, el: T):
         self.stack.append(el)
 
-    def pop(self) -> T:
+    def pop(self):
         if not self.stack:
-            raise StackUnderflowError
+            raise StackUnderflowError()
         return self.stack.pop()
 
-    def peek(self) -> T:
+    def peek(self):
         if not self.stack:
-            raise StackUnderflowError
+            raise StackUnderflowError()
         return self.stack[-1]
 
     def empty(self):
@@ -37,7 +37,7 @@ class LinkedListStack:
         self.top = None
         self.size = 0
 
-    def __iter__(self) -> Iterator[Any]:
+    def __iter__(self):
         curr = self.top
         while curr:
             val = curr.val
@@ -55,26 +55,28 @@ class LinkedListStack:
         self.top = node
         self.size += 1
 
-    def pop(self) -> SinglyNode | None:
+    def pop(self):
         """
         Remove the top element from the stack and return it, or return
         None if the stack is empty
         """
 
-        if self.top:
-            node = self.top.val
-            self.size -= 1
-            self.top = self.top.next if self.top.next else None
-            return node
+        if not self.top:
+            raise StackUnderflowError()
+        node = self.top.val
+        self.size -= 1
+        self.top = self.top.next if self.top.next else None
+        return node
 
-    def peek(self) -> SinglyNode | None:
+    def peek(self):
         """Get the value of the top element from the stack.
 
         :return: the top element from the stack, or None if the stack is empty
         """
 
-        if self.top:
-            return self.top.val
+        if not self.top:
+            raise StackUnderflowError()
+        return self.top.val
 
     def empty(self) -> bool:
         """Check if the stack is empty.
